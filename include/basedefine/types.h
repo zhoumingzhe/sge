@@ -14,10 +14,6 @@ typedef short sge_int16;
 typedef int sge_int32;
 typedef long long sge_int64;
 
-<<<<<<< HEAD
-typedef float float32;
-typedef double float64;
-=======
 #ifdef SGE_32
 typedef unsigned int sge_size_t;
 typedef int sge_ssize_t;
@@ -30,8 +26,5 @@ typedef long long sge_ssize_t;
 
 typedef float sge_float32;
 typedef double sge_float64;
-
-
->>>>>>> types and test frameworks
 
 #endif
