@@ -13,6 +13,6 @@ Builtin Types
 1. Integers are typedefined explicitly into 8bit/16bit/32bit/64bit.
 2. Floats are typedefined explicitly into 32bit/64bit.
 3. Don not use compiler builtin types in the code, exceptions are: dealing with
-   external library, platform specific code, compiler specific code, void*.
+   other library, platform specific code, compiler specific code, void*.
 4. Explicit narrow conversions are required between builtin types.
 
