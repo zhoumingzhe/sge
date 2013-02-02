@@ -1,0 +1,18 @@
+Coding Standard
+
+Preprocessor Definitions
+
+1. Conditional preprocessor definitions use all UPPER CASE, such as SGE_GCC, SGE_MSVC.
+2. Functional preprocessor definitions use all lower case, such as sge_align, sge_thread_local.
+3. Preprocessor definitions is prefixed by sge_.
+4. Header gurads definitions format is MODULENAME_FILENAME_H.
+
+
+Builtin Types
+
+1. Integers are typedefined explicitly into 8bit/16bit/32bit/64bit.
+2. Floats are typedefined explicitly into 32bit/64bit.
+3. Don not use compiler builtin types in the code, exceptions are: dealing with
+   external library, platform specific code, compiler specific code.
+4. Explicit narrow conversions are required between builtin types.
+
