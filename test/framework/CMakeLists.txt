@@ -6,7 +6,7 @@ if(MSVC)
 endif(MSVC)
 
 if(CMAKE_COMPILER_IS_GNUCC)
-    aux_source_directory(src/platform/win PLATFORM_SRC)
+    aux_source_directory(src/platform/posix PLATFORM_SRC)
 endif(CMAKE_COMPILER_IS_GNUCC)
 
 include_directories(include/platform)
