@@ -1,5 +1,5 @@
-#ifndef BASEDEFINE_MACROS_H
-#define BASEDEFINE_MACROS_H
+#ifndef BASEDEFINE_PLATFORM_H
+#define BASEDEFINE_PLATFORM_H
 
 #if defined (__GNUC__)
 #define SGE_GCC

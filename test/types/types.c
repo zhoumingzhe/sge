@@ -29,6 +29,8 @@ sge_static_assert((sge_int32)(-1) < 0, int32_can_be_less_than_0);
 sge_static_assert((sge_int64)(-1) < 0, int64_can_be_less_than_0);
 sge_static_assert((sge_ssize_t)(-1) < 0, ssize_t_can_be_less_than_0);
 
+sge_static_assert((sge_uint8)(sge_uint8_max) + 1 == 0, check_sge_uint8_max);
+
 void run_all_test()
 {
 }
