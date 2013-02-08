@@ -33,7 +33,7 @@ typedef double sge_float64;
 #define sge_int8_min (-128)
 
 #define sge_uint16_max 0xffff
-#define sge_int16_max 32737
+#define sge_int16_max 32767
 #define sge_int16_min (-32768)
 
 #define sge_uint32_max 0xffffffff
@@ -44,4 +44,7 @@ typedef double sge_float64;
 #define sge_int64_max 9223372036854775807LL
 #define sge_int64_min (-9223372036854775807LL-1)
 
+SGE_EXTERN_C_START
+
+SGE_EXTERN_C_END
 #endif

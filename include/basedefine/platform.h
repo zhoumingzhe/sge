@@ -41,5 +41,13 @@
 #define sge_thread_local __declspec(thread)
 #endif
 
+#ifdef __cplusplus
+#define SGE_EXTERN_C_START extern "C" {
+#define SGE_EXTERN_C_END }
+#else
+#define SGE_EXTERN_C_START
+#define SGE_EXTERN_C_END
+#endif
+
 #endif
 
