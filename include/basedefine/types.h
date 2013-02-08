@@ -8,7 +8,8 @@ typedef unsigned short sge_uint16;
 typedef unsigned int sge_uint32;
 typedef unsigned long long sge_uint64;
 
-typedef char sge_int8;
+//signed builtin types
+typedef signed char sge_int8;
 typedef short sge_int16;
 typedef int sge_int32;
 typedef long long sge_int64;
