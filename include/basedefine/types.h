@@ -44,7 +44,4 @@ typedef double sge_float64;
 #define sge_int64_max 9223372036854775807LL
 #define sge_int64_min (-9223372036854775807LL-1)
 
-SGE_EXTERN_C_START
-
-SGE_EXTERN_C_END
 #endif

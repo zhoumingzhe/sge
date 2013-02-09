@@ -41,6 +41,7 @@
 #define sge_thread_local __declspec(thread)
 #endif
 
+//C function declearation must be enclosed in extern "C"
 #ifdef __cplusplus
 #define SGE_EXTERN_C_START extern "C" {
 #define SGE_EXTERN_C_END }
@@ -49,5 +50,6 @@
 #define SGE_EXTERN_C_END
 #endif
 
+#define UNUSED(x) ((void)x)
 #endif
 
