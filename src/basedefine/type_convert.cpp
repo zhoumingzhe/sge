@@ -19,10 +19,10 @@ to sge_safe_convert(from f)
 }
 
 #define DEF_SAFE_CONVERT(to, from)\
-template to sge_safe_convert<to, from>(from f);\
-to sge_safe_convert_##from##_to_##to(from f)\
+template sge_##to sge_safe_convert<sge_##to, sge_##from>(sge_##from f);\
+sge_##to sge_safe_convert_##from##_to_##to(sge_##from f)\
 {\
-    return sge_safe_convert<to>(f);\
+    return sge_safe_convert<sge_##to>(f);\
 }
 
 #define DEF_GET_MAX(type) template<> type sge_get_max<type>(){ return (type##_max);}
@@ -49,50 +49,50 @@ DEF_GET_MIN_0(sge_uint16)
 DEF_GET_MIN_0(sge_uint32)
 DEF_GET_MIN_0(sge_uint64)
 
-DEF_SAFE_CONVERT(sge_int8, sge_int16)
-DEF_SAFE_CONVERT(sge_int8, sge_int32)
-DEF_SAFE_CONVERT(sge_int8, sge_int64)
-DEF_SAFE_CONVERT(sge_int8, sge_uint8)
-DEF_SAFE_CONVERT(sge_int8, sge_uint16)
-DEF_SAFE_CONVERT(sge_int8, sge_uint32)
-DEF_SAFE_CONVERT(sge_int8, sge_uint64)
+DEF_SAFE_CONVERT(int8, int16)
+DEF_SAFE_CONVERT(int8, int32)
+DEF_SAFE_CONVERT(int8, int64)
+DEF_SAFE_CONVERT(int8, uint8)
+DEF_SAFE_CONVERT(int8, uint16)
+DEF_SAFE_CONVERT(int8, uint32)
+DEF_SAFE_CONVERT(int8, uint64)
 
-DEF_SAFE_CONVERT(sge_int16, sge_int32)
-DEF_SAFE_CONVERT(sge_int16, sge_int64)
-DEF_SAFE_CONVERT(sge_int16, sge_uint16)
-DEF_SAFE_CONVERT(sge_int16, sge_uint32)
-DEF_SAFE_CONVERT(sge_int16, sge_uint64)
+DEF_SAFE_CONVERT(int16, int32)
+DEF_SAFE_CONVERT(int16, int64)
+DEF_SAFE_CONVERT(int16, uint16)
+DEF_SAFE_CONVERT(int16, uint32)
+DEF_SAFE_CONVERT(int16, uint64)
 
-DEF_SAFE_CONVERT(sge_int32, sge_int64)
-DEF_SAFE_CONVERT(sge_int32, sge_uint32)
-DEF_SAFE_CONVERT(sge_int32, sge_uint64)
+DEF_SAFE_CONVERT(int32, int64)
+DEF_SAFE_CONVERT(int32, uint32)
+DEF_SAFE_CONVERT(int32, uint64)
 
-DEF_SAFE_CONVERT(sge_int64, sge_uint64)
+DEF_SAFE_CONVERT(int64, uint64)
 
-DEF_SAFE_CONVERT(sge_uint8, sge_uint16)
-DEF_SAFE_CONVERT(sge_uint8, sge_uint32)
-DEF_SAFE_CONVERT(sge_uint8, sge_uint64)
-DEF_SAFE_CONVERT(sge_uint8, sge_int8)
-DEF_SAFE_CONVERT(sge_uint8, sge_int16)
-DEF_SAFE_CONVERT(sge_uint8, sge_int32)
-DEF_SAFE_CONVERT(sge_uint8, sge_int64)
+DEF_SAFE_CONVERT(uint8, uint16)
+DEF_SAFE_CONVERT(uint8, uint32)
+DEF_SAFE_CONVERT(uint8, uint64)
+DEF_SAFE_CONVERT(uint8, int8)
+DEF_SAFE_CONVERT(uint8, int16)
+DEF_SAFE_CONVERT(uint8, int32)
+DEF_SAFE_CONVERT(uint8, int64)
 
-DEF_SAFE_CONVERT(sge_uint16, sge_uint32)
-DEF_SAFE_CONVERT(sge_uint16, sge_uint64)
-DEF_SAFE_CONVERT(sge_uint16, sge_int8)
-DEF_SAFE_CONVERT(sge_uint16, sge_int16)
-DEF_SAFE_CONVERT(sge_uint16, sge_int32)
-DEF_SAFE_CONVERT(sge_uint16, sge_int64)
+DEF_SAFE_CONVERT(uint16, uint32)
+DEF_SAFE_CONVERT(uint16, uint64)
+DEF_SAFE_CONVERT(uint16, int8)
+DEF_SAFE_CONVERT(uint16, int16)
+DEF_SAFE_CONVERT(uint16, int32)
+DEF_SAFE_CONVERT(uint16, int64)
 
-DEF_SAFE_CONVERT(sge_uint32, sge_uint64)
-DEF_SAFE_CONVERT(sge_uint32, sge_int8)
-DEF_SAFE_CONVERT(sge_uint32, sge_int16)
-DEF_SAFE_CONVERT(sge_uint32, sge_int32)
-DEF_SAFE_CONVERT(sge_uint32, sge_int64)
+DEF_SAFE_CONVERT(uint32, uint64)
+DEF_SAFE_CONVERT(uint32, int8)
+DEF_SAFE_CONVERT(uint32, int16)
+DEF_SAFE_CONVERT(uint32, int32)
+DEF_SAFE_CONVERT(uint32, int64)
 
-DEF_SAFE_CONVERT(sge_uint64, sge_int8)
-DEF_SAFE_CONVERT(sge_uint64, sge_int16)
-DEF_SAFE_CONVERT(sge_uint64, sge_int32)
-DEF_SAFE_CONVERT(sge_uint64, sge_int64)
+DEF_SAFE_CONVERT(uint64, int8)
+DEF_SAFE_CONVERT(uint64, int16)
+DEF_SAFE_CONVERT(uint64, int32)
+DEF_SAFE_CONVERT(uint64, int64)
 
 
