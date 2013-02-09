@@ -1,2 +1,2 @@
 add_subdirectory(framework)
-add_subdirectory(types)
+add_subdirectory(basedefine)
