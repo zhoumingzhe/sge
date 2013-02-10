@@ -12,9 +12,9 @@ to sge_safe_convert(from f)
     to to_min = sge_get_min<to>();
     to to_max = sge_get_max<to>();
     if(f<0)
-        assert(to_min<0&&f>=to_min);
+        assert(to_min<0 && (sge_int64)f >= (sge_int64)to_min);
     else
-        assert(f<=to_max);
+        assert((sge_uint64)f <= (sge_uint64)to_max);
     return (to)f;
 }
 

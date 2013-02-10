@@ -28,20 +28,20 @@ typedef float sge_float32;
 typedef double sge_float64;
 
 //builtin type limitations
-#define sge_uint8_max 0xff
-#define sge_int8_max 127
-#define sge_int8_min (-128)
+const sge_uint8 sge_uint8_max = 0xff;
+const sge_int8 sge_int8_max = 127;
+const sge_int8 sge_int8_min = (-128);
 
-#define sge_uint16_max 0xffff
-#define sge_int16_max 32767
-#define sge_int16_min (-32768)
+const sge_uint16 sge_uint16_max = 0xffff;
+const sge_int16 sge_int16_max = 32767;
+const sge_int16 sge_int16_min = (-32768);
 
-#define sge_uint32_max 0xffffffff
-#define sge_int32_max 2147483647
-#define sge_int32_min (-2147483647-1)
+const sge_uint32 sge_uint32_max = 0xffffffffu;
+const sge_int32 sge_int32_max = 2147483647;
+const sge_int32 sge_int32_min = -2147483647-1;
 
-#define sge_uint64_max 0xffffffffffffffffULL
-#define sge_int64_max 9223372036854775807LL
-#define sge_int64_min (-9223372036854775807LL-1)
+const sge_uint64 sge_uint64_max = 0xffffffffffffffffULL;
+const sge_int64 sge_int64_max = 9223372036854775807LL;
+const sge_int64 sge_int64_min = -9223372036854775807LL-1;
 
 #endif
