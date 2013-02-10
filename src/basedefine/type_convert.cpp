@@ -1,5 +1,5 @@
-#include <assert.h>
 #include "type_convert.h"
+#include "runtime_assert.h"
 template<typename t>
 t sge_get_max();
 
@@ -12,9 +12,9 @@ to sge_safe_convert(from f)
     to to_min = sge_get_min<to>();
     to to_max = sge_get_max<to>();
     if(f<0)
-        assert(to_min<0&&f>=to_min);
+        sge_runtime_assert(to_min<0 && (sge_int64)f >= (sge_int64)to_min);
     else
-        assert(f<=to_max);
+        sge_runtime_assert((sge_uint64)f <= (sge_uint64)to_max);
     return (to)f;
 }
 
@@ -25,9 +25,9 @@ sge_##to sge_safe_convert_##from##_to_##to(sge_##from f)\
     return sge_safe_convert<sge_##to>(f);\
 }
 
-#define DEF_GET_MAX(type) template<> type sge_get_max<type>(){ return (type##_max);}
-#define DEF_GET_MIN(type) template<> type sge_get_min<type>(){ return (type##_min);}
-#define DEF_GET_MIN_0(type) template<> type sge_get_min<type>() {return 0;}
+#define DEF_GET_MAX(type) template<> sge_inline type sge_get_max<type>(){ return (type##_max);}
+#define DEF_GET_MIN(type) template<> sge_inline type sge_get_min<type>(){ return (type##_min);}
+#define DEF_GET_MIN_0(type) template<> sge_inline type sge_get_min<type>() {return 0;}
 
 DEF_GET_MAX(sge_int8)
 DEF_GET_MAX(sge_int16)

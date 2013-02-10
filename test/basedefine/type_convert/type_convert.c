@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "basedefine/type_convert.h"
 
 void run_all_test()
