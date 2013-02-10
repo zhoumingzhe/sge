@@ -1,6 +1,6 @@
-#include <assert.h>
 #include "basedefine/static_assert.h"
 #include "basedefine/types.h"
+#include "basedefine/runtime_assert.h"
 //static assert is enough
 sge_static_assert(sizeof(sge_uint8) == 1, uint8_is_1_byte);
 sge_static_assert(sizeof(sge_uint16) == 2, uint16_is_2_byte);
@@ -32,15 +32,15 @@ sge_static_assert((sge_ssize_t)(-1) < 0, ssize_t_can_be_less_than_0);
 
 void run_all_test()
 {
-    assert((sge_uint8)(sge_uint8_max + 1) == 0);
-    assert((sge_uint16)(sge_uint16_max + 1) == 0);
-    assert((sge_uint32)(sge_uint32_max + 1) == 0);
-    assert((sge_uint64)(sge_uint64_max + 1) == 0);
+    sge_runtime_assert((sge_uint8)(sge_uint8_max + 1) == 0);
+    sge_runtime_assert((sge_uint16)(sge_uint16_max + 1) == 0);
+    sge_runtime_assert((sge_uint32)(sge_uint32_max + 1) == 0);
+    sge_runtime_assert((sge_uint64)(sge_uint64_max + 1) == 0);
 
     //avoid gcc warning about integer overflow, we need to convert the max value to unsigned first
-    assert((sge_int8)((sge_uint8)sge_int8_max + 1) == sge_int8_min);
-    assert((sge_int16)((sge_uint16)sge_int16_max + 1) == sge_int16_min);
-    assert((sge_int32)((sge_uint32)sge_int32_max + 1) == sge_int32_min);
-    assert((sge_int64)((sge_uint64)sge_int64_max + 1) == sge_int64_min);
+    sge_runtime_assert((sge_int8)((sge_uint8)sge_int8_max + 1) == sge_int8_min);
+    sge_runtime_assert((sge_int16)((sge_uint16)sge_int16_max + 1) == sge_int16_min);
+    sge_runtime_assert((sge_int32)((sge_uint32)sge_int32_max + 1) == sge_int32_min);
+    sge_runtime_assert((sge_int64)((sge_uint64)sge_int64_max + 1) == sge_int64_min);
 
 }
