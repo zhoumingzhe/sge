@@ -3,5 +3,5 @@
 
 void run_all_test()
 {
-    sge_safe_convert_int8_to_uint8(sge_int8_max + 1);
+    sge_safe_convert_int16_to_uint16(-1);
 }
