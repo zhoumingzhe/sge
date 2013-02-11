@@ -32,12 +32,14 @@
 #define sge_export
 #define sge_import
 #define sge_inline static __inline __attribute__((always_inline))
+#define sge_template_inst_inline
 #define sge_thread_local __thread
 #elif defined SGE_MSVC
 #define sge_align(aligntype) __declspec(align(aligntype))
 #define sge_export __declspec(dllexport)
 #define sge_import __declspec(dllimport)
 #define sge_inline __forceinline
+#define sge_template_inst_inline __forceinline
 #define sge_thread_local __declspec(thread)
 #endif
 

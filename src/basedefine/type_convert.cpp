@@ -6,28 +6,9 @@ sge_inline t sge_get_max();
 template<typename t>
 sge_inline t sge_get_min();
 
-template<typename to, typename from>
-to sge_safe_convert(from f)
-{
-    to to_min = sge_get_min<to>();
-    to to_max = sge_get_max<to>();
-    if(f<0)
-        sge_runtime_assert(to_min<0 && (sge_int64)f >= (sge_int64)to_min);
-    else
-        sge_runtime_assert((sge_uint64)f <= (sge_uint64)to_max);
-    return (to)f;
-}
-
-#define DEF_SAFE_CONVERT(to, from)\
-template sge_##to sge_safe_convert<sge_##to, sge_##from>(sge_##from f);\
-sge_##to sge_safe_convert_##from##_to_##to(sge_##from f)\
-{\
-    return sge_safe_convert<sge_##to>(f);\
-}
-
-#define DEF_GET_MAX(type) template<> type sge_get_max<type>(){ return (type##_max);}
-#define DEF_GET_MIN(type) template<> type sge_get_min<type>(){ return (type##_min);}
-#define DEF_GET_MIN_0(type) template<> type sge_get_min<type>() {return 0;}
+#define DEF_GET_MAX(type) template<> sge_template_inst_inline type sge_get_max<type>(){ return (type##_max);}
+#define DEF_GET_MIN(type) template<> sge_template_inst_inline type sge_get_min<type>(){ return (type##_min);}
+#define DEF_GET_MIN_0(type) template<> sge_template_inst_inline type sge_get_min<type>() {return 0;}
 
 DEF_GET_MAX(sge_int8)
 DEF_GET_MAX(sge_int16)
@@ -48,6 +29,25 @@ DEF_GET_MIN_0(sge_uint8)
 DEF_GET_MIN_0(sge_uint16)
 DEF_GET_MIN_0(sge_uint32)
 DEF_GET_MIN_0(sge_uint64)
+
+template<typename to, typename from>
+sge_inline to sge_safe_convert(from f)
+{
+    to to_min = sge_get_min<to>();
+    to to_max = sge_get_max<to>();
+    if(f<0)
+        sge_runtime_assert(to_min<0 && (sge_int64)f >= (sge_int64)to_min);
+    else
+        sge_runtime_assert((sge_uint64)f <= (sge_uint64)to_max);
+    return (to)f;
+}
+
+#define DEF_SAFE_CONVERT(to, from)\
+    template sge_##to sge_safe_convert<sge_##to, sge_##from>(sge_##from f);\
+    sge_##to sge_safe_convert_##from##_to_##to(sge_##from f)\
+{\
+    return sge_safe_convert<sge_##to>(f);\
+}
 
 DEF_SAFE_CONVERT(int8, int16)
 DEF_SAFE_CONVERT(int8, int32)

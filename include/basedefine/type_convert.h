@@ -1,13 +1,6 @@
 #ifndef BASEDEFINE_TYPE_CONVERT_H
 #define BASEDEFINE_TYPE_CONVERT_H
 #include "types.h"
-
-#ifdef __cplusplus
-
-template <typename to, typename from>
-to sge_safe_convert(from f);
-
-#endif
 SGE_EXTERN_C_START
 #define DECL_SAFE_CONVERT(to, from)\
 sge_##to sge_safe_convert_##from##_to_##to(sge_##from f);
