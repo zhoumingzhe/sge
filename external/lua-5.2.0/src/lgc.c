@@ -221,7 +221,7 @@ GCObject *luaC_newobj (lua_State *L, int tt, size_t sz, GCObject **list,
   if (list == NULL)
     list = &g->allgc;  /* standard list for collectable objects */
   gch(o)->marked = luaC_white(g);
-  gch(o)->tt = tt;
+  gch(o)->tt = (lu_byte)tt;
   gch(o)->next = *list;
   *list = o;
   return o;
@@ -781,7 +781,7 @@ static void GCTM (lua_State *L, int propagateerrors) {
     L->top += 2;  /* and (next line) call the finalizer */
     status = luaD_pcall(L, dothecall, NULL, savestack(L, L->top - 2), 0);
     L->allowhook = oldah;  /* restore hooks */
-    g->gcrunning = running;  /* restore state */
+    g->gcrunning = (lu_byte)running;  /* restore state */
     if (status != LUA_OK && propagateerrors) {  /* error while running __gc? */
       if (status == LUA_ERRRUN) {  /* is there an error msg.? */
         luaO_pushfstring(L, "error in __gc metamethod (%s)",
@@ -1092,7 +1092,7 @@ void luaC_fullgc (lua_State *L, int isemergency) {
     /* generational mode must always start in propagate phase */
     luaC_runtilstate(L, bitmask(GCSpropagate));
   }
-  g->gckind = origkind;
+  g->gckind = (lu_byte)origkind;
   luaE_setdebt(g, stddebt(g));
   if (!isemergency)   /* do not run finalizers during emergency GC */
     callallpendingfinalizers(L, 1);

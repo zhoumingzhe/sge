@@ -99,13 +99,13 @@ typedef LUAI_UACNUMBER l_uacNumber;
 /*
 ** non-return type
 */
-#if defined(__GNUC__)
-#define l_noret		void __attribute__((noreturn))
-#elif defined(_MSC_VER)
-#define l_noret		void __declspec(noreturn)
-#else
+//#if defined(__GNUC__)
+//#define l_noret		void __attribute__((noreturn))
+//#elif defined(_MSC_VER)
+//#define l_noret		void __declspec(noreturn)
+//#else
 #define l_noret		void
-#endif
+//#endif
 
 
 
