@@ -22,6 +22,7 @@ LUALIB_API int  luaopen_tolua (lua_State* tolua_S);
 /* function to register type */
 static void tolua_reg_types (lua_State* tolua_S)
 {
+    (void)(tolua_S);
 }
 
 /* Open lib function */

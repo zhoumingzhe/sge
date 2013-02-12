@@ -1,4 +1,5 @@
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+add_definitions(-DLUA_BUILD_AS_DLL)
 add_library(lua SHARED
 lapi.c
 lauxlib.c
@@ -29,7 +30,6 @@ lstrlib.c
 ltable.c
 ltablib.c
 ltm.c
-lua.c
 lundump.c
 lvm.c
 lzio.c

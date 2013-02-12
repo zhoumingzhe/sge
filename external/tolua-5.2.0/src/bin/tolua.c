@@ -60,6 +60,8 @@ static void error (char* o)
  exit(1);
 }
 
+int tolua_tolua_open (lua_State* L);
+
 int main (int argc, char* argv[])
 {
  lua_State* L = luaL_newstate();
@@ -106,7 +108,6 @@ int main (int argc, char* argv[])
 
 #ifndef LUA_SOURCE
  {
-  int tolua_tolua_open (lua_State* L);
   tolua_tolua_open(L);
  }
 #else
