@@ -438,8 +438,8 @@ static void movegotosout (FuncState *fs, BlockCnt *bl) {
 static void enterblock (FuncState *fs, BlockCnt *bl, lu_byte isloop) {
   bl->isloop = isloop;
   bl->nactvar = fs->nactvar;
-  bl->firstlabel = fs->ls->dyd->label.n;
-  bl->firstgoto = fs->ls->dyd->gt.n;
+  bl->firstlabel = (short)fs->ls->dyd->label.n;
+  bl->firstgoto = (short)fs->ls->dyd->gt.n;
   bl->upval = 0;
   bl->previous = fs->bl;
   fs->bl = bl;
@@ -663,7 +663,7 @@ static void recfield (LexState *ls, struct ConsControl *cc) {
   rkkey = luaK_exp2RK(fs, &key);
   expr(ls, &val);
   luaK_codeABC(fs, OP_SETTABLE, cc->t->u.info, rkkey, luaK_exp2RK(fs, &val));
-  fs->freereg = reg;  /* free registers */
+  fs->freereg = (lu_byte)reg;  /* free registers */
 }
 
 
@@ -819,7 +819,7 @@ static int explist (LexState *ls, expdesc *v) {
 
 static void funcargs (LexState *ls, expdesc *f, int line) {
   FuncState *fs = ls->fs;
-  expdesc args;
+  expdesc args = {0};
   int base, nparams;
   switch (ls->t.token) {
     case '(': {  /* funcargs -> `(' [ explist ] `)' */
@@ -857,7 +857,7 @@ static void funcargs (LexState *ls, expdesc *f, int line) {
   }
   init_exp(f, VCALL, luaK_codeABC(fs, OP_CALL, base, nparams+1, 2));
   luaK_fixline(fs, line);
-  fs->freereg = base+1;  /* call remove function and arguments and leaves
+  fs->freereg = (lu_byte)base+1;  /* call remove function and arguments and leaves
                             (unless changed) one result */
 }
 
@@ -1112,12 +1112,12 @@ static void check_conflict (LexState *ls, struct LHS_assign *lh, expdesc *v) {
       if (lh->v.u.ind.vt == v->k && lh->v.u.ind.t == v->u.info) {
         conflict = 1;
         lh->v.u.ind.vt = VLOCAL;
-        lh->v.u.ind.t = extra;  /* previous assignment will use safe copy */
+        lh->v.u.ind.t = (lu_byte)extra;  /* previous assignment will use safe copy */
       }
       /* index is the local being assigned? (index cannot be upvalue) */
       if (v->k == VLOCAL && lh->v.u.ind.idx == v->u.info) {
         conflict = 1;
-        lh->v.u.ind.idx = extra;  /* previous assignment will use safe copy */
+        lh->v.u.ind.idx = (short)extra;  /* previous assignment will use safe copy */
       }
     }
   }
@@ -1150,7 +1150,7 @@ static void assignment (LexState *ls, struct LHS_assign *lh, int nvars) {
     if (nexps != nvars) {
       adjust_assign(ls, nvars, nexps, &e);
       if (nexps > nvars)
-        ls->fs->freereg -= nexps - nvars;  /* remove extra values */
+        ls->fs->freereg -= (lu_byte)(nexps - nvars);  /* remove extra values */
     }
     else {
       luaK_setoneret(ls->fs, &e);  /* close last expression */

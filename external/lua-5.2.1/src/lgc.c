@@ -226,7 +226,7 @@ GCObject *luaC_newobj (lua_State *L, int tt, size_t sz, GCObject **list,
   if (list == NULL)
     list = &g->allgc;  /* standard list for collectable objects */
   gch(o)->marked = luaC_white(g);
-  gch(o)->tt = tt;
+  gch(o)->tt = (lu_byte)tt;
   gch(o)->next = *list;
   *list = o;
   return o;
@@ -825,7 +825,7 @@ static void GCTM (lua_State *L, int propagateerrors) {
     L->top += 2;  /* and (next line) call the finalizer */
     status = luaD_pcall(L, dothecall, NULL, savestack(L, L->top - 2), 0);
     L->allowhook = oldah;  /* restore hooks */
-    g->gcrunning = running;  /* restore state */
+    g->gcrunning = (lu_byte)running;  /* restore state */
     if (status != LUA_OK && propagateerrors) {  /* error while running __gc? */
       if (status == LUA_ERRRUN) {  /* is there an error object? */
         const char *msg = (ttisstring(L->top - 1))
@@ -985,7 +985,7 @@ void luaC_freeallobjects (lua_State *L) {
 
 static l_mem atomic (lua_State *L) {
   global_State *g = G(L);
-  l_mem work = -g->GCmemtrav;  /* start counting work */
+  l_mem work = 0-g->GCmemtrav;  /* start counting work */
   GCObject *origweak, *origall;
   lua_assert(!iswhite(obj2gco(g->mainthread)));
   markobject(g, L);  /* mark running thread */
@@ -1194,7 +1194,7 @@ void luaC_fullgc (lua_State *L, int isemergency) {
     /* generational mode must always start in propagate phase */
     luaC_runtilstate(L, bitmask(GCSpropagate));
   }
-  g->gckind = origkind;
+  g->gckind = (lu_byte)origkind;
   luaE_setdebt(g, stddebt(g));
   if (!isemergency)   /* do not run finalizers during emergency GC */
     callallpendingfinalizers(L, 1);
