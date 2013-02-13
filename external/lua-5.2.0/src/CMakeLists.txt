@@ -1,5 +1,7 @@
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-add_definitions(-DLUA_BUILD_AS_DLL)
+if(MSVC)
+    add_definitions(-DLUA_BUILD_AS_DLL)
+endif(MSVC)
 add_library(lua SHARED
 lapi.c
 lauxlib.c
@@ -34,3 +36,6 @@ lundump.c
 lvm.c
 lzio.c
 )
+if(CMAKE_COMPILER_IS_GNUCC)
+    target_link_libraries(lua m)
+endif(CMAKE_COMPILER_IS_GNUCC)
