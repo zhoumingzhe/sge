@@ -12,4 +12,4 @@ endif(CMAKE_COMPILER_IS_GNUCC)
 
 include_directories(include/platform)
 add_library(test_framework ${STARTUP_SRC} ${PLATFORM_SRC})
-set_property(TARGET "test_framework" PROPERTY FOLDER "test")
+set_property(TARGET test_framework PROPERTY FOLDER test)

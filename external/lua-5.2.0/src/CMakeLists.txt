@@ -39,4 +39,4 @@ lzio.c
 if(CMAKE_COMPILER_IS_GNUCC)
     target_link_libraries(lua m)
 endif(CMAKE_COMPILER_IS_GNUCC)
-set_property(TARGET "lua" PROPERTY FOLDER "external/lua")
+set_property(TARGET lua PROPERTY FOLDER external/lua)
