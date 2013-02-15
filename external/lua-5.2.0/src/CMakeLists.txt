@@ -1,8 +1,6 @@
 add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-if(MSVC)
-    add_definitions(-DLUA_BUILD_AS_DLL)
-endif(MSVC)
-add_library(lua SHARED
+include_directories(../../../include)
+add_library(lua
 lapi.c
 lauxlib.c
 lbaselib.c
@@ -36,7 +34,9 @@ lundump.c
 lvm.c
 lzio.c
 )
+set(lua_dependency basedefine)
 if(CMAKE_COMPILER_IS_GNUCC)
-    target_link_libraries(lua m)
+    set(lua_dependency "${lua_dependency} m")
 endif(CMAKE_COMPILER_IS_GNUCC)
+target_link_libraries(lua ${lua_dependency})
 set_property(TARGET lua PROPERTY FOLDER external/lua)

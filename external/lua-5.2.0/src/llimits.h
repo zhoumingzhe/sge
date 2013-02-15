@@ -11,7 +11,7 @@
 #include <limits.h>
 #include <stddef.h>
 
-
+#include "basedefine/runtime_assert.h"
 #include "lua.h"
 
 
@@ -54,7 +54,7 @@ typedef LUAI_USER_ALIGNMENT_T L_Umaxalign;
 /* result of a `usual argument conversion' over lua_Number */
 typedef LUAI_UACNUMBER l_uacNumber;
 
-
+#define lua_assert sge_runtime_assert
 /* internal assertions for in-house debugging */
 #if defined(lua_assert)
 #define check_exp(c,e)		(lua_assert(c), (e))

@@ -18,7 +18,7 @@ if(MSVC)
         endif(${flag_var} MATCHES "/Ob0")
 
         if(${flag_var} MATCHES "/W[0-4]")
-            string(REGEX REPLACE "/W[0-4]" "/W4 /WX" ${flag_var} "${${flag_var}}")
+            string(REGEX REPLACE "/W[0-4]" "/W4 /WX /wd4709" ${flag_var} "${${flag_var}}")
         endif(${flag_var} MATCHES "/W[0-4]")
    
     endforeach(flag_var)
@@ -36,10 +36,6 @@ if(CMAKE_COMPILER_IS_GNUCC)
     #set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} --fatal-warnings")
     #set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --fatal-warnings")
 endif(CMAKE_COMPILER_IS_GNUCC)
-
-
-#add_definitions(-DCHECK_NUMERIC_CONVERT)
-#add_definitions(-DCHECK_ATOMIC_OPS_ALIGNMENT)
 
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/None/lib)
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/None/bin)
