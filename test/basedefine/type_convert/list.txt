@@ -1,0 +1,12 @@
+#cp type_convert.c type_convert_uint32_to_uint16.c
+#cp type_convert.c type_convert_uint64_to_uint32.c
+#cp type_convert.c type_convert_uint64_to_uint64.c
+cp type_convert.c type_convert_int8_to_uint64_n.c
+cp type_convert.c type_convert_int16_to_uint64_n.c
+cp type_convert.c type_convert_int32_to_uint64_n.c
+cp type_convert.c type_convert_int64_to_uint64_n.c
+cp type_convert.c type_convert_int8_to_uint64_p.c
+cp type_convert.c type_convert_int16_to_uint64_p.c
+cp type_convert.c type_convert_int32_to_uint64_p.c
+cp type_convert.c type_convert_int64_to_uint64_p.c
+

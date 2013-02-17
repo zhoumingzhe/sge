@@ -35,8 +35,14 @@ lvm.c
 lzio.c
 )
 set(lua_dependency basedefine)
+
 if(CMAKE_COMPILER_IS_GNUCC)
-    set(lua_dependency "${lua_dependency} m")
+    set(lua_dependency basedefine m)
 endif(CMAKE_COMPILER_IS_GNUCC)
+
+if(MSVC)
+    set(lua_dependency basedefine)
+endif(MSVC)
+
 target_link_libraries(lua ${lua_dependency})
 set_property(TARGET lua PROPERTY FOLDER external/lua)
