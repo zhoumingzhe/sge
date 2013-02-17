@@ -17,8 +17,11 @@ if(MSVC)
             string(REGEX REPLACE "/Ob0" "/Ob1" ${flag_var} "${${flag_var}}")
         endif(${flag_var} MATCHES "/Ob0")
 
+#4100: unreferenced parameter, tolua
+#4324: struct alignment, lua
+#4709: comma operator within array index expression, lua
         if(${flag_var} MATCHES "/W[0-4]")
-            string(REGEX REPLACE "/W[0-4]" "/W4 /WX /wd4709 /wd4324" ${flag_var} "${${flag_var}}")
+            string(REGEX REPLACE "/W[0-4]" "/W4 /WX /wd4100 /wd4324 /wd4709" ${flag_var} "${${flag_var}}")
         endif(${flag_var} MATCHES "/W[0-4]")
    
     endforeach(flag_var)
