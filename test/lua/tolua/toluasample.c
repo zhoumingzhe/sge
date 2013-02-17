@@ -7,7 +7,7 @@ int tolua_interface_open (lua_State*);
 void handleluaerror(lua_State*L)
 {
     const char *msg = lua_tostring(L, -1);
-    printf(msg);
+    printf("%s", msg);
     lua_pop(L, 1);
 }
 void printtop(lua_State *L)
