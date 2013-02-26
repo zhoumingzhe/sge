@@ -1,0 +1,5 @@
+include_directories(../../../include)
+include_directories(../../../include/script)
+AUX_SOURCE_DIRECTORY(. SCRIPTBASE_SRC)
+add_library(scriptbase ${SCRIPTBASE_SRC})
+set_property(TARGET scriptbase PROPERTY FOLDER src/script)

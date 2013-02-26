@@ -1,0 +1,7 @@
+include_directories(../scriptbase)
+include_directories(../../../include)
+include_directories(../../../include/script)
+include_directories(../../../external/lua-5.2.0/src)
+AUX_SOURCE_DIRECTORY(. LUASCRIPT_SRC)
+add_library(luascript ${LUASCRIPT_SRC})
+set_property(TARGET luascript PROPERTY FOLDER src/script)
