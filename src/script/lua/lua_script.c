@@ -1,9 +1,10 @@
-#include <stdlib.h>
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
 #include "basedefine/utility.h"
 #include "script_internal.h"
+#include "memory/sge_memory.h"
+
 struct sge_lua_obj
 {
     struct sge_script_obj obj;
@@ -20,7 +21,7 @@ static void lua_destory (struct sge_script_obj* obj)
     struct sge_lua_obj* pobj = get_container(obj, struct sge_lua_obj, obj);
 
     lua_close(pobj->l);
-    free(pobj);
+    sge_free(pobj);
 }
 
 static const struct sge_script_obj_table lua_vptr =
@@ -33,7 +34,7 @@ struct sge_script_obj* sge_create_lua_script()
 {
     struct sge_lua_obj * ret;
 
-    ret = (struct sge_lua_obj *)malloc(sizeof(struct sge_lua_obj));
+    ret = (struct sge_lua_obj *)sge_malloc(sizeof(struct sge_lua_obj));
     ret->obj.vptr = &lua_vptr;
     ret->l = luaL_newstate();
 

@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8.10)
 project(sge)
 enable_testing()
 
+#SET(BUILD_SHARED_LIBS ON)
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(SGE_POSIX true)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -Wall -Werror")
