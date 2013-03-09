@@ -1,3 +1,3 @@
 #/bin/bash
-ctags -R
+find . -name "*.[ch]" | xargs ctags 
 
