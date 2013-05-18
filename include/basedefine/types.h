@@ -14,6 +14,8 @@ typedef short sge_int16;
 typedef int sge_int32;
 typedef long long sge_int64;
 
+typedef sge_int8 sge_bool;
+
 #ifdef SGE_32
 typedef unsigned int sge_size_t;
 typedef int sge_ssize_t;

@@ -10,3 +10,8 @@ void sge_destory_script(struct sge_script_obj* obj)
 {
     obj->vptr->destory(obj);
 }
+
+void sge_exec_buffer(struct sge_script_obj* obj, const char* buffer)
+{
+	obj->vptr->exec_buffer(buffer);
+}
