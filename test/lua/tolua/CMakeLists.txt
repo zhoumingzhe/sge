@@ -1,4 +1,4 @@
-include_directories(../../../external/lua-5.2.0/src ../../../external/tolua-5.2.0/include .)
+include_directories(. ../../../external/lua-5.2.0/src ../../../external/tolua-5.2.0/include ../../../include)
 
 ADD_CUSTOM_COMMAND(
    OUTPUT interface.c
@@ -8,7 +8,7 @@ ADD_CUSTOM_COMMAND(
 
 
 add_executable(toluasample toluasample.c interface.c interface_c.c)
-target_link_libraries(toluasample lua tolualib)
+target_link_libraries(toluasample lua tolualib scriptbase luascript memory)
 #add_test(NAME test_types COMMAND test_types)
 set_property(TARGET toluasample PROPERTY FOLDER test/lua)
 

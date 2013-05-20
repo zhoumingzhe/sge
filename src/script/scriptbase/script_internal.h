@@ -13,6 +13,7 @@ struct sge_script_obj_table
     void (* destory)(struct sge_script_obj*);
     sge_bool (* exec_file)(struct sge_script_obj*, const char*);
     sge_bool (* exec_buffer)(struct sge_script_obj*, const char*);
+    void* (*get_native)(struct sge_script_obj*);
 };
 
 #endif

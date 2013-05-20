@@ -13,3 +13,8 @@ test_type getresult(test_type v)
     return v;
 }
 
+test_type* getresultptr( test_type* v )
+{
+    return v;
+}
+
