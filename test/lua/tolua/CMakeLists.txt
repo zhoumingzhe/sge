@@ -2,7 +2,7 @@ include_directories(../../../external/lua-5.2.0/src ../../../external/tolua-5.2.
 
 ADD_CUSTOM_COMMAND(
    OUTPUT interface.c
-   COMMAND tolua -n interface -o ${CMAKE_CURRENT_BINARY_DIR}/interface.c ${CMAKE_CURRENT_SOURCE_DIR}/interface.pkg
+   COMMAND tolua -n interface -o interface.c ${CMAKE_CURRENT_SOURCE_DIR}/interface.pkg
    DEPENDS tolua ${CMAKE_CURRENT_SOURCE_DIR}/interface.pkg
    )
 
