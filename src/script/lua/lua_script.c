@@ -57,6 +57,20 @@ static sge_bool lua_exec_buffer(struct sge_script_obj* obj, const char* buffer)
         lua_report_error(l);
     return !status;
 }
+
+static sge_int32 lua_call_func(struct sge_script_obj* obj, const char* name)
+{
+    struct sge_lua_obj* pobj = get_container(obj, struct sge_lua_obj, obj);
+    lua_State* l = pobj->l;
+
+    lua_getglobal(l, name);
+    if(lua_pcall(l,0,0,0))
+    {
+        lua_report_error(l);
+    }
+    return 0;
+}
+
 static void* lua_get_native(struct sge_script_obj* obj)
 {
     struct sge_lua_obj* pobj = get_container(obj, struct sge_lua_obj, obj);
@@ -68,6 +82,7 @@ static const struct sge_script_obj_table lua_vptr =
     lua_destory,
     lua_exec_file,
     lua_exec_buffer,
+    lua_call_func,
     lua_get_native
 };
 
