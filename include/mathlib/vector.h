@@ -5,7 +5,7 @@ typedef __m128 sge_vec4f;
 typedef sge_float32 sge_vec4f_unalign[4];
 
 //sse shuffle macro, internal use only
-#define sge_sse_shuffle(f3, f2, f1, f0)\
+#define sge_sse_shuffle(f0, f1, f2, f3)\
     (((f3) << 6) | ((f2) << 4) | ((f1) << 2) | ((f0)))
 
 //initialization functions
@@ -31,6 +31,39 @@ sge_inline float sge_vec4f_getw(sge_vec4f val)
 {
     sge_vec4f val1 = _mm_shuffle_ps(val, val, sge_sse_shuffle(3, 3, 3, 3));
     return _mm_cvtss_f32(val1);
+}
+
+sge_inline sge_vec4f sge_vec4f_setx(sge_vec4f val, sge_float32 x)
+{
+    sge_vec4f tmp = _mm_set_ss(x);
+    return _mm_move_ss(val,tmp);
+}
+
+sge_inline sge_vec4f sge_vec4f_sety(sge_vec4f val, sge_float32 x)
+{
+    sge_vec4f tmp = _mm_set_ss(x);
+    sge_vec4f shf = _mm_shuffle_ps(val, val, sge_sse_shuffle(1, 0, 2, 3));
+    shf = _mm_move_ss(shf, tmp);
+
+    return _mm_shuffle_ps(shf, shf, sge_sse_shuffle(1, 0, 2, 3));
+}
+
+sge_inline sge_vec4f sge_vec4f_setz(sge_vec4f val, sge_float32 x)
+{
+    sge_vec4f tmp = _mm_set_ss(x);
+    sge_vec4f shf = _mm_shuffle_ps(val, val, sge_sse_shuffle(2, 1, 0, 3));
+    shf = _mm_move_ss(shf, tmp);
+
+    return _mm_shuffle_ps(shf, shf, sge_sse_shuffle(2, 1, 0, 3));
+}
+
+sge_inline sge_vec4f sge_vec4f_setw(sge_vec4f val, sge_float32 x)
+{
+    sge_vec4f tmp = _mm_set_ss(x);
+    sge_vec4f shf = _mm_shuffle_ps(val, val, sge_sse_shuffle(3, 1, 2, 0));
+    shf = _mm_move_ss(shf, tmp);
+
+    return _mm_shuffle_ps(shf, shf, sge_sse_shuffle(3, 1, 2, 0));
 }
 
 //comparison functions

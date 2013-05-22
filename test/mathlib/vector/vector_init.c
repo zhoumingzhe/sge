@@ -6,6 +6,7 @@ void run_all_test()
     sge_vec4f v2 = sge_vec4f_rep(0.0f);
     sge_vec4f v3;
     sge_vec4f v4;
+    sge_vec4f v5 = sge_vec4f_zero();
 
     sge_runtime_assert(sge_vec4f_eql(v1, v2));
 
@@ -17,5 +18,13 @@ void run_all_test()
     sge_runtime_assert(sge_vec4f_gety(v4)==2.0f);
     sge_runtime_assert(sge_vec4f_eqlz(v4,3.0f));
     sge_runtime_assert(sge_vec4f_eqlw(v4,4.0f));
+
+    v5 = sge_vec4f_setx(v5, 1.0f);
+    v5 = sge_vec4f_sety(v5, 2.0f);
+    v5 = sge_vec4f_setz(v5, 3.0f);
+    v5 = sge_vec4f_setw(v5, 4.0f);
+
+
+    sge_runtime_assert(sge_vec4f_eql(v4, v5));
 
 }
