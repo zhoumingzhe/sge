@@ -9,11 +9,13 @@ typedef sge_float32 sge_vec4f_unalign[4];
     (((f3) << 6) | ((f2) << 4) | ((f1) << 2) | ((f0)))
 
 //initialization functions
+
 #define sge_vec4f_zero() _mm_setzero_ps()
 #define sge_vec4f_rep(val) _mm_set_ps1(val)
 #define sge_vec4f_init(x, y, z, w) _mm_set_ps(w, z, y, x)
 
-//access functions
+//--------------access functions-------------------
+
 #define sge_vec4f_getx(val) _mm_cvtss_f32(val)
 sge_inline float sge_vec4f_gety(sge_vec4f val)
 {
@@ -66,7 +68,22 @@ sge_inline sge_vec4f sge_vec4f_setw(sge_vec4f val, sge_float32 x)
     return _mm_shuffle_ps(shf, shf, sge_sse_shuffle(3, 1, 2, 0));
 }
 
-//comparison functions
+//---------------------arithmetic functions---------------
+
+#define sge_vec4_max(val1, val2) _mm_max_ps(val1, val2)
+#define sge_vec4_min(val1, val2) _mm_min_ps(val1, val2)
+#define sge_vec4_add(val1, val2) _mm_add_ps(val1, val2)
+#define sge_vec4_sub(val1, val2) _mm_sub_ps(val1, val2)
+#define sge_vec4_mul(val1, val2) _mm_mul_ps(val1, val2)
+#define sge_vec4_div(val1, val2) _mm_div_ps(val1, val2)
+
+sge_inline sge_vec4f sge_vec4_scale(sge_vec4f val, sge_float32 scale)
+{
+    sge_vec4f temp = sge_vec4f_rep(scale);
+    return sge_vec4_mul(val, temp);
+}
+
+//--------------comparison functions-------------------
 sge_inline sge_bool sge_vec4f_eql(sge_vec4f val1, sge_vec4f val2)
 {
     sge_vec4f temp = _mm_cmpeq_ps(val1,val2);
