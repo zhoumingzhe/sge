@@ -70,18 +70,37 @@ sge_inline sge_vec4f sge_vec4f_setw(sge_vec4f val, sge_float32 x)
 
 //---------------------arithmetic functions---------------
 
-#define sge_vec4_max(val1, val2) _mm_max_ps(val1, val2)
-#define sge_vec4_min(val1, val2) _mm_min_ps(val1, val2)
-#define sge_vec4_add(val1, val2) _mm_add_ps(val1, val2)
-#define sge_vec4_sub(val1, val2) _mm_sub_ps(val1, val2)
-#define sge_vec4_mul(val1, val2) _mm_mul_ps(val1, val2)
-#define sge_vec4_div(val1, val2) _mm_div_ps(val1, val2)
+#define sge_vec4f_max(val1, val2) _mm_max_ps(val1, val2)
+#define sge_vec4f_min(val1, val2) _mm_min_ps(val1, val2)
+#define sge_vec4f_add(val1, val2) _mm_add_ps(val1, val2)
+#define sge_vec4f_sub(val1, val2) _mm_sub_ps(val1, val2)
+#define sge_vec4f_mul(val1, val2) _mm_mul_ps(val1, val2)
+#define sge_vec4f_div(val1, val2) _mm_div_ps(val1, val2)
+#define sge_vec4f_rcp_fast(val) _mm_rcp_ps(val)
+#define sge_vec4f_div_fast(val1, val2) sge_vec4f_mul(val1, sge_vec4f_rcp_fast(val2))
 
-sge_inline sge_vec4f sge_vec4_scale(sge_vec4f val, sge_float32 scale)
+sge_inline sge_vec4f sge_vec4f_scale(sge_vec4f val, sge_float32 scale)
 {
     sge_vec4f temp = sge_vec4f_rep(scale);
-    return sge_vec4_mul(val, temp);
+    return sge_vec4f_mul(val, temp);
 }
+
+sge_inline sge_vec4f sge_vec4_abs(sge_vec4f val)
+{
+    sge_vec4f temp = sge_vec4f_zero();
+    temp = sge_vec4f_sub(temp, val);
+    return sge_vec4f_max(temp, val);
+}
+
+sge_inline sge_vec4f sge_vec4f_clamp(sge_vec4f val, sge_vec4f minval, sge_vec4f maxval)
+{
+    sge_vec4f temp = sge_vec4f_max(val, minval);
+    return sge_vec4f_min(temp, maxval);
+}
+
+//todo
+sge_vec4f sge_vec4f_floor(sge_vec4f val);
+sge_vec4f sge_vec4f_celling(sge_vec4f val);
 
 //--------------comparison functions-------------------
 sge_inline sge_bool sge_vec4f_eql(sge_vec4f val1, sge_vec4f val2)
