@@ -35,7 +35,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         )
         
         if(${flag_var} MATCHES "/Ob0")
-            string(REGEX REPLACE "/Ob0" "/Ob1" ${flag_var} "${${flag_var}}")
+            string(REGEX REPLACE "/Ob0" "/Oi /Ob1" ${flag_var} "${${flag_var}}")
         endif(${flag_var} MATCHES "/Ob0")
 
         #4100: unreferenced parameter, tolua
