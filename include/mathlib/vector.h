@@ -36,9 +36,18 @@ extern const sge_vec4i_aligned sge_abs_mask;
 #define sge_vec4f_zero() _mm_setzero_ps()
 #define sge_vec4f_rep(val) _mm_set_ps1(val)
 #define sge_vec4f_init(x, y, z, w) _mm_set_ps(w, z, y, x)
-#define sge_vec4f_load(addr) _mm_load_ps(addr)
 
-#define sge_vec4i_load(addr) _mm_load_si128((sge_vec4i*)addr)
+//------------------memory access function----------------
+
+#define sge_vec4f_load_aligned(addr) _mm_load_ps(addr)
+#define sge_vec4i_load_aligned(addr) _mm_load_si128((sge_vec4i*)addr)
+#define sge_vec4f_store_aligned(addr, val) _mm_store_ps(addr, val)
+#define sge_vec4i_store_aligned(addr, val) _mm_store_si128((sge_vec4i*)add, val)
+
+#define sge_vec4f_load_unaligned(addr) _mm_loadu_ps(addr)
+#define sge_vec4i_load_unaligned(addr) _mm_loadu_si128((sge_vec4i*)addr)
+#define sge_vec4f_store_unaligned(addr, val) _mm_storeu_ps(addr, val)
+#define sge_vec4i_store_unaligned(addr, val) _mm_storeu_si128((sge_vec4i*)add, val)
 
 //--------------------access functions-------------------
 
@@ -124,14 +133,13 @@ sge_inline sge_vec4f sge_vec4f_clamp(sge_vec4f val, sge_vec4f minval, sge_vec4f 
     return sge_vec4f_min(temp, maxval);
 }
 
-//todo
 sge_inline sge_vec4f sge_vec4f_floor(sge_vec4f val)
 {
-    sge_vec4f result = _mm_sub_ps(val, _mm_castsi128_ps(sge_vec4i_load(sge_onehalf_eps)));
+    sge_vec4f result = _mm_sub_ps(val, _mm_castsi128_ps(sge_vec4i_load_aligned(sge_onehalf_eps)));
     sge_vec4i vInt = _mm_cvtps_epi32(result);
-    sge_vec4i abs_int = _mm_and_si128(_mm_castps_si128(val), sge_vec4i_load(sge_abs_mask));
+    sge_vec4i abs_int = _mm_and_si128(_mm_castps_si128(val), sge_vec4i_load_aligned(sge_abs_mask));
 
-    abs_int = _mm_cmplt_epi32(abs_int, sge_vec4i_load(sge_no_fraction));
+    abs_int = _mm_cmplt_epi32(abs_int, sge_vec4i_load_aligned(sge_no_fraction));
     result = _mm_cvtepi32_ps(vInt);
     result = _mm_and_ps(result, _mm_castsi128_ps(abs_int));
     abs_int = _mm_andnot_si128(abs_int, _mm_castps_si128(val));
@@ -141,11 +149,11 @@ sge_inline sge_vec4f sge_vec4f_floor(sge_vec4f val)
 
 sge_inline sge_vec4f sge_vec4f_celling(sge_vec4f val)
 {
-    sge_vec4f result = _mm_add_ps(val, _mm_castsi128_ps(sge_vec4i_load(sge_onehalf_eps)));
+    sge_vec4f result = _mm_add_ps(val, _mm_castsi128_ps(sge_vec4i_load_aligned(sge_onehalf_eps)));
     sge_vec4i vInt = _mm_cvtps_epi32(result);
-    sge_vec4i abs_int = _mm_and_si128(_mm_castps_si128(val), sge_vec4i_load(sge_abs_mask));
+    sge_vec4i abs_int = _mm_and_si128(_mm_castps_si128(val), sge_vec4i_load_aligned(sge_abs_mask));
 
-    abs_int = _mm_cmplt_epi32(abs_int, sge_vec4i_load(sge_no_fraction));
+    abs_int = _mm_cmplt_epi32(abs_int, sge_vec4i_load_aligned(sge_no_fraction));
     result = _mm_cvtepi32_ps(vInt);
     result = _mm_and_ps(result, _mm_castsi128_ps(abs_int));
     abs_int = _mm_andnot_si128(abs_int, _mm_castps_si128(val));
