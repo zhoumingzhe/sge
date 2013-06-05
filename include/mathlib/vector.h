@@ -19,8 +19,11 @@ typedef sge_align(16) sge_float64 sge_vec2d_aligned[2];
 
 //--------------------------constants---------------------
 
-extern const sge_vec4f_aligned sge_zero;
-extern const sge_vec4f_aligned sge_no_fraction;
+extern const sge_vec4f_aligned sge_vec4f_no_fraction;
+extern const sge_vec4f_aligned sge_vec4f_1000;
+extern const sge_vec4f_aligned sge_vec4f_0100;
+extern const sge_vec4f_aligned sge_vec4f_0010;
+extern const sge_vec4f_aligned sge_vec4f_0001;
 
 
 
@@ -139,7 +142,7 @@ sge_inline sge_vec4f sge_vec4f_floor(sge_vec4f val)
     sge_vec4i vInt = _mm_cvtps_epi32(result);
     sge_vec4i abs_int = _mm_and_si128(_mm_castps_si128(val), sge_vec4i_load_aligned(sge_abs_mask));
 
-    abs_int = _mm_cmplt_epi32(abs_int, sge_vec4i_load_aligned(sge_no_fraction));
+    abs_int = _mm_cmplt_epi32(abs_int, sge_vec4i_load_aligned(sge_vec4f_no_fraction));
     result = _mm_cvtepi32_ps(vInt);
     result = _mm_and_ps(result, _mm_castsi128_ps(abs_int));
     abs_int = _mm_andnot_si128(abs_int, _mm_castps_si128(val));
@@ -153,7 +156,7 @@ sge_inline sge_vec4f sge_vec4f_celling(sge_vec4f val)
     sge_vec4i vInt = _mm_cvtps_epi32(result);
     sge_vec4i abs_int = _mm_and_si128(_mm_castps_si128(val), sge_vec4i_load_aligned(sge_abs_mask));
 
-    abs_int = _mm_cmplt_epi32(abs_int, sge_vec4i_load_aligned(sge_no_fraction));
+    abs_int = _mm_cmplt_epi32(abs_int, sge_vec4i_load_aligned(sge_vec4f_no_fraction));
     result = _mm_cvtepi32_ps(vInt);
     result = _mm_and_ps(result, _mm_castsi128_ps(abs_int));
     abs_int = _mm_andnot_si128(abs_int, _mm_castps_si128(val));
