@@ -13,6 +13,6 @@ ADD_CUSTOM_COMMAND(
 
 
 add_executable(tolua_test toluasample.c interface.c interface_c.c)
-target_link_libraries(tolua_test lua tolualib scriptbase luascript memory basedefine test_framework)
+target_link_libraries(tolua_test tolualib luascript scriptbase lua memory basedefine test_framework)
 add_test(NAME tolua_test COMMAND tolua_test)
 set_property(TARGET tolua_test PROPERTY FOLDER test/lua)
