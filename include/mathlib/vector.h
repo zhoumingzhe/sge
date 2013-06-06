@@ -208,5 +208,20 @@ sge_inline sge_bool sge_vec4f_near_eql(sge_vec4f val1, sge_vec4f val2, sge_vec4f
     return sge_vec4f_lt(delta, tolerance);
 }
 
+//---------------------------geometric functions-------------------------
+sge_inline sge_vec4f sge_vec4f_lerp(sge_vec4f val1, sge_vec4f val2, sge_float32 t)
+{
+    sge_vec4f l = sge_vec4f_sub(val2, val1);
+    sge_vec4f s = sge_vec4f_rep(t);
+    sge_vec4f result = sge_vec4f_mul(l, s);
+    return sge_vec4f_add(result, val1);
+}
+
+sge_inline sge_vec4f sge_vec4f_lerp_vec4f(sge_vec4f val1, sge_vec4f val2, sge_vec4f t)
+{
+    sge_vec4f l = sge_vec4f_sub(val2, val1);
+    sge_vec4f result = sge_vec4f_mul(l, t);
+    return sge_vec4f_add(result, val1);
+}
 
 #endif
