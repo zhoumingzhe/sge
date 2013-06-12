@@ -24,11 +24,19 @@ extern const sge_vec4f_aligned sge_vec4f_1000;
 extern const sge_vec4f_aligned sge_vec4f_0100;
 extern const sge_vec4f_aligned sge_vec4f_0010;
 extern const sge_vec4f_aligned sge_vec4f_0001;
+extern const sge_vec4f_aligned sge_vec4f_neg_1000;
+extern const sge_vec4f_aligned sge_vec4f_neg_0100;
+extern const sge_vec4f_aligned sge_vec4f_neg_0010;
+extern const sge_vec4f_aligned sge_vec4f_neg_0001;
 
 
 
 extern const sge_vec4i_aligned sge_onehalf_eps;
 extern const sge_vec4i_aligned sge_abs_mask;
+extern const sge_vec4i_aligned sge_x_mask;
+extern const sge_vec4i_aligned sge_y_mask;
+extern const sge_vec4i_aligned sge_z_mask;
+extern const sge_vec4i_aligned sge_w_mask;
 
 //sse shuffle macro, internal use only
 #define sge_sse_shuffle(f0, f1, f2, f3)\

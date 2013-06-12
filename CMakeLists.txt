@@ -42,8 +42,13 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         #4324: struct alignment, lua
         #4709: comma operator within array index expression, lua
         #4201: nameless union/struct
+        #4127: conditional expression is constant, glut
+        #4306: conversion truncate, glut
+        #4244: conversion loss of data, glut
+        #4245: signed unsigned mismatch, glut
+        #4706: assignment with conditional expression, glut
         if(${flag_var} MATCHES "/W[0-4]")
-            string(REGEX REPLACE "/W[0-4]" "/W4 /WX /wd4100 /wd4324 /wd4709 /wd4201" ${flag_var} "${${flag_var}}")
+            string(REGEX REPLACE "/W[0-4]" "/W4 /WX /wd4100 /wd4324 /wd4709 /wd4201 /wd4127 /wd4305 /wd4306 /wd4244 /wd4245 /wd4706" ${flag_var} "${${flag_var}}")
         endif(${flag_var} MATCHES "/W[0-4]")
    
     endforeach(flag_var)
