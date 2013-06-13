@@ -2,26 +2,25 @@
 #include <GL/glew.h>
 #define FREEGLUT_STATIC
 #include <GL/freeglut.h>
-extern "C"
-{
+
 #include "mathlib/matrix.h"
-};
-#include <cstdlib>
-#include <iostream>
+#include "memory/sge_memory.h"
+
+#include <cstdio>
 typedef struct {
     GLenum       type;
     const char*  filename;
     GLuint       shader;
 } ShaderInfo;
 
-static const GLchar*
+static GLchar*
     ReadShader( const char* filename )
 {
     FILE* infile;
     fopen_s( &infile, filename, "rb" );
 
     if ( !infile ) {
-        std::cerr << "Unable to open file '" << filename << "'" << std::endl;
+        printf("Unable to open file '%s'\n", filename);
         return NULL;
     }
 
@@ -29,14 +28,14 @@ static const GLchar*
     int len = ftell( infile );
     fseek( infile, 0, SEEK_SET );
 
-    GLchar* source = new GLchar[len+1];
+    GLchar* source = (GLchar*)sge_malloc(len+1);
 
     fread( source, 1, len, infile );
     fclose( infile );
 
     source[len] = 0;
 
-    return const_cast<const GLchar*>(source);
+    return source;
 }
 
 GLuint
@@ -52,7 +51,7 @@ GLuint
 
         entry->shader = shader;
 
-        const GLchar* source = ReadShader( entry->filename );
+        GLchar* source = ReadShader( entry->filename );
         if ( source == NULL ) {
             for ( entry = shaders; entry->type != GL_NONE; ++entry ) {
                 glDeleteShader( entry->shader );
@@ -61,9 +60,9 @@ GLuint
 
             return 0;
         }
-
-        glShaderSource( shader, 1, &source, NULL );
-        delete [] source;
+        const GLchar* src = source;
+        glShaderSource( shader, 1, &src, NULL );
+        sge_free(source);
 
         glCompileShader( shader );
 
@@ -73,10 +72,10 @@ GLuint
             GLsizei len;
             glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &len );
 
-            GLchar* log = new GLchar[len+1];
+            GLchar* log = (GLchar*)sge_malloc(len+1);
             glGetShaderInfoLog( shader, len, &len, log );
-            std::cerr << "Shader compilation failed: " << log << std::endl;
-            delete [] log;
+            printf("Shader compilation failed: %s\n", log);;
+            sge_free(log);
 
             return 0;
         }
@@ -94,10 +93,10 @@ GLuint
         GLsizei len;
         glGetProgramiv( program, GL_INFO_LOG_LENGTH, &len );
 
-        GLchar* log = new GLchar[len+1];
+        GLchar* log = (GLchar*)sge_malloc(len+1);
         glGetProgramInfoLog( program, len, &len, log );
-        std::cerr << "Shader linking failed: " << log << std::endl;
-        delete [] log;
+        printf("Shader linking failed: %s\n");
+        sge_free(log);
 
         for ( entry = shaders; entry->type != GL_NONE; ++entry ) {
             glDeleteShader( entry->shader );
@@ -113,9 +112,9 @@ GLuint
 
 float aspect;
 GLuint render_prog;
-GLuint vao[1];
-GLuint vbo[1];
-GLuint ebo[1];
+GLuint vao;
+GLuint vbo;
+GLuint ebo;
 
 GLint render_model_matrix_loc;
 GLint render_projection_matrix_loc;
@@ -138,8 +137,8 @@ void Display()
     glUniformMatrix4fv(render_projection_matrix_loc, 1, GL_FALSE, &projection_matrix.m[0][0]);
 
     // Set up for a glDrawElements call
-    glBindVertexArray(vao[0]);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
     // Draw Arrays...
     model_matrix = sge_mat44f_translate(-3.0f, 0.0f, -5.0f);
@@ -194,8 +193,8 @@ void Finalize(void)
 {
     glUseProgram(0);
     glDeleteProgram(render_prog);
-    glDeleteVertexArrays(1, vao);
-    glDeleteBuffers(1, vbo);
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
 }
 
 int main(int argc, char ** argv)
@@ -262,16 +261,16 @@ int main(int argc, char ** argv)
     };
 
     // Set up the element array buffer
-    glGenBuffers(1, ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertex_indices), vertex_indices, GL_STATIC_DRAW);
 
     // Set up the vertex attributes
-    glGenVertexArrays(1, vao);
-    glBindVertexArray(vao[0]);
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-    glGenBuffers(1, vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_positions) + sizeof(vertex_colors), NULL, GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertex_positions), vertex_positions);
     glBufferSubData(GL_ARRAY_BUFFER, sizeof(vertex_positions), sizeof(vertex_colors), vertex_colors);
