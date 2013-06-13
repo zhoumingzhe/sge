@@ -1,6 +1,7 @@
 #ifndef MATHLIB_MATRIX_H
 #define MATHLIB_MATRIX_H
 #include "vector.h"
+SGE_EXTERN_C_START
 typedef sge_align(16) union sge_mat44f
 {
     sge_vec4f r[4];
@@ -108,4 +109,5 @@ sge_inline sge_mat44f sge_mat44f_perspective_rh_gl(sge_float32 width, sge_float3
     M.r[3] = _mm_shuffle_ps(t2, t3, sge_sse_shuffle(0,0,1,2));
     return M;
 }
+SGE_EXTERN_C_END
 #endif

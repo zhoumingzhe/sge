@@ -3,7 +3,7 @@
 #include "basedefine/types.h"
 #include <xmmintrin.h>
 #include <emmintrin.h>
-
+SGE_EXTERN_C_START
 //-----------------------------typedefs--------------------
 typedef __m128 sge_vec4f;
 typedef __m128i sge_vec4i;
@@ -234,5 +234,5 @@ sge_inline sge_vec4f sge_vec4f_lerp_vec4f(sge_vec4f val1, sge_vec4f val2, sge_ve
     sge_vec4f result = sge_vec4f_mul(l, t);
     return sge_vec4f_add(result, val1);
 }
-
+SGE_EXTERN_C_END
 #endif
