@@ -6,7 +6,7 @@
 #include "mathlib/matrix.h"
 #include "memory/sge_memory.h"
 
-#include <cstdio>
+#include <stdio.h>
 typedef struct {
     GLenum       type;
     const char*  filename;
@@ -17,6 +17,10 @@ static GLchar*
     ReadShader( const char* filename )
 {
     FILE* infile;
+    int len;
+    GLchar* source;
+
+
     fopen_s( &infile, filename, "rb" );
 
     if ( !infile ) {
@@ -25,10 +29,10 @@ static GLchar*
     }
 
     fseek( infile, 0, SEEK_END );
-    int len = ftell( infile );
+    len = ftell( infile );
     fseek( infile, 0, SEEK_SET );
 
-    GLchar* source = (GLchar*)sge_malloc(len+1);
+    source = (GLchar*)sge_malloc(len+1);
 
     fread( source, 1, len, infile );
     fclose( infile );
@@ -41,17 +45,23 @@ static GLchar*
 GLuint
     LoadShaders( ShaderInfo* shaders )
 {
+    GLuint program;
+    ShaderInfo* entry = shaders;
+    GLint linked;
+
+
     if ( shaders == NULL ) { return 0; }
 
-    GLuint program = glCreateProgram();
+    program = glCreateProgram();
 
-    ShaderInfo* entry = shaders;
     while ( entry->type != GL_NONE ) {
+        GLchar* source = ReadShader( entry->filename );
         GLuint shader = glCreateShader( entry->type );
+        const GLchar* src = source;
+        GLint compiled;
 
         entry->shader = shader;
 
-        GLchar* source = ReadShader( entry->filename );
         if ( source == NULL ) {
             for ( entry = shaders; entry->type != GL_NONE; ++entry ) {
                 glDeleteShader( entry->shader );
@@ -60,19 +70,19 @@ GLuint
 
             return 0;
         }
-        const GLchar* src = source;
         glShaderSource( shader, 1, &src, NULL );
         sge_free(source);
 
         glCompileShader( shader );
 
-        GLint compiled;
         glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
         if ( !compiled ) {
             GLsizei len;
+            GLchar* log;
+
             glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &len );
 
-            GLchar* log = (GLchar*)sge_malloc(len+1);
+            log = (GLchar*)sge_malloc(len+1);
             glGetShaderInfoLog( shader, len, &len, log );
             printf("Shader compilation failed: %s\n", log);;
             sge_free(log);
@@ -87,13 +97,13 @@ GLuint
 
     glLinkProgram( program );
 
-    GLint linked;
     glGetProgramiv( program, GL_LINK_STATUS, &linked );
     if ( !linked ) {
         GLsizei len;
+        GLchar* log;
         glGetProgramiv( program, GL_INFO_LOG_LENGTH, &len );
 
-        GLchar* log = (GLchar*)sge_malloc(len+1);
+        log = (GLchar*)sge_malloc(len+1);
         glGetProgramInfoLog( program, len, &len, log );
         printf("Shader linking failed: %s\n");
         sge_free(log);
@@ -119,9 +129,10 @@ GLuint ebo;
 GLint render_model_matrix_loc;
 GLint render_projection_matrix_loc;
 
-void Display()
+void Display(void)
 {
     sge_mat44f model_matrix;
+    sge_mat44f projection_matrix = sge_mat44f_perspective_rh_gl(2.0f, 2*aspect, 1.0f, 500.0f);
 
     // Setup
     glEnable(GL_CULL_FACE);
@@ -133,7 +144,6 @@ void Display()
     glUseProgram(render_prog);
 
     // Set up the model and projection matrix
-    sge_mat44f projection_matrix = sge_mat44f_perspective_rh_gl(2.0f, 2*aspect, 1.0f, 500.0f);
     glUniformMatrix4fv(render_projection_matrix_loc, 1, GL_FALSE, &projection_matrix.m[0][0]);
 
     // Set up for a glDrawElements call
@@ -167,7 +177,7 @@ void Display()
 void Reshape(int width, int height)
 {
     glViewport(0, 0 , width, height);
-    aspect = float(height) / float(width);
+    aspect = (float)(height) / (float)(width);
 }
 
 void MainLoop(void)
@@ -203,39 +213,12 @@ int main(int argc, char ** argv)
     int one = 1;
     char * name = "name";
 
-    glutInitContextFlags(GLUT_DEBUG);
-    // glutInitContextProfile(GLUT_CORE_PROFILE);
-    // glutInitContextVersion(4, 3);
-
-    glutInitWindowSize(1024, 768);
-    glutInitWindowPosition (140, 140);
-    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-    glutInit(&one, &name);
-
-    glutCreateWindow("OpenGL Application");
-    glutDisplayFunc(Display);
-    glutReshapeFunc(Reshape);
-
-    glewInit();
-
-    if (glDebugMessageCallbackARB != NULL)
-        glDebugMessageCallbackARB(DebugOutputCallback, 0);
-
     static ShaderInfo shader_info[] =
     {
         { GL_VERTEX_SHADER, "primitive_restart.vs.glsl" },
         { GL_FRAGMENT_SHADER, "primitive_restart.fs.glsl" },
         { GL_NONE, NULL }
     };
-
-    render_prog = LoadShaders(shader_info);
-
-    glUseProgram(render_prog);
-
-    // "model_matrix" is actually an array of 4 matrices
-    render_model_matrix_loc = glGetUniformLocation(render_prog, "model_matrix");
-    render_projection_matrix_loc = glGetUniformLocation(render_prog, "projection_matrix");
-
     // A single triangle
     static const GLfloat vertex_positions[] =
     {
@@ -259,6 +242,32 @@ int main(int argc, char ** argv)
     {
         0, 1, 2
     };
+
+    glutInitContextFlags(GLUT_DEBUG);
+    // glutInitContextProfile(GLUT_CORE_PROFILE);
+    // glutInitContextVersion(4, 3);
+
+    glutInitWindowSize(1024, 768);
+    glutInitWindowPosition (140, 140);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+    glutInit(&one, &name);
+
+    glutCreateWindow("OpenGL Application");
+    glutDisplayFunc(Display);
+    glutReshapeFunc(Reshape);
+
+    glewInit();
+
+    if (glDebugMessageCallbackARB != NULL)
+        glDebugMessageCallbackARB(DebugOutputCallback, 0);
+
+    render_prog = LoadShaders(shader_info);
+
+    glUseProgram(render_prog);
+
+    // "model_matrix" is actually an array of 4 matrices
+    render_model_matrix_loc = glGetUniformLocation(render_prog, "model_matrix");
+    render_projection_matrix_loc = glGetUniformLocation(render_prog, "projection_matrix");
 
     // Set up the element array buffer
     glGenBuffers(1, &ebo);
