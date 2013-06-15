@@ -206,42 +206,40 @@ void Finalize(void)
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
 }
+static ShaderInfo shader_info[] =
+{
+    { GL_VERTEX_SHADER, "primitive_restart.vs.glsl" },
+    { GL_FRAGMENT_SHADER, "primitive_restart.fs.glsl" },
+    { GL_NONE, NULL }
+};
+// A single triangle
+static const GLfloat vertex_positions[] =
+{
+    -1.0f, -1.0f,  0.0f, 1.0f,
+    1.0f, -1.0f,  0.0f, 1.0f,
+    -1.0f,  1.0f,  0.0f, 1.0f,
+    -1.0f, -1.0f,  0.0f, 1.0f,
+};
 
+// Color for each vertex
+static const GLfloat vertex_colors[] =
+{
+    1.0f, 1.0f, 1.0f, 1.0f,
+    1.0f, 1.0f, 0.0f, 1.0f,
+    1.0f, 0.0f, 1.0f, 1.0f,
+    0.0f, 1.0f, 1.0f, 1.0f
+};
+
+// Indices for the triangle strips
+static const GLushort vertex_indices[] =
+{
+    0, 1, 2
+};
 int main(int argc, char ** argv)
 {
 
     int one = 1;
     char * name = "name";
-
-    static ShaderInfo shader_info[] =
-    {
-        { GL_VERTEX_SHADER, "primitive_restart.vs.glsl" },
-        { GL_FRAGMENT_SHADER, "primitive_restart.fs.glsl" },
-        { GL_NONE, NULL }
-    };
-    // A single triangle
-    static const GLfloat vertex_positions[] =
-    {
-        -1.0f, -1.0f,  0.0f, 1.0f,
-        1.0f, -1.0f,  0.0f, 1.0f,
-        -1.0f,  1.0f,  0.0f, 1.0f,
-        -1.0f, -1.0f,  0.0f, 1.0f,
-    };
-
-    // Color for each vertex
-    static const GLfloat vertex_colors[] =
-    {
-        1.0f, 1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 1.0f,
-        0.0f, 1.0f, 1.0f, 1.0f
-    };
-
-    // Indices for the triangle strips
-    static const GLushort vertex_indices[] =
-    {
-        0, 1, 2
-    };
 
     glutInitContextFlags(GLUT_DEBUG);
     // glutInitContextProfile(GLUT_CORE_PROFILE);
