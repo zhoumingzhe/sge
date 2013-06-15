@@ -20,7 +20,6 @@ WNDCLASS     g_windClass;
 RECT         g_windowRect;
 sge_bool         g_ContinueRendering = 0;
 
-int nStep = 0;
 static GLchar*
     ReadShader( const char* filename )
 {
@@ -126,7 +125,6 @@ GLuint
 
     return program;
 }
-
 
 float aspect;
 GLuint render_prog;
@@ -242,52 +240,26 @@ static const GLushort vertex_indices[] =
     0, 1, 2
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Callback functions to handle all window functions this app cares about.
-// Once complete, pass message on to next app in the hook chain.
-LRESULT CALLBACK WndProc(	HWND	hWnd,		// Handle For This Window
-                         UINT	uMsg,		// Message For This Window
-                         WPARAM	wParam,		// Additional Message Information
-                         LPARAM	lParam)		// Additional Message Information
+LRESULT CALLBACK WndProc(HWND	hWnd,
+                         UINT	uMsg,
+                         WPARAM	wParam,
+                         LPARAM	lParam)
 {
-    unsigned int key = 0;
-
-    // Handle relevant messages individually
     switch(uMsg)
     {
-    case WM_ACTIVATE:
-    case WM_SETFOCUS:
-        Display();
-        return 0;
     case WM_SIZE:
         Reshape(LOWORD(lParam),HIWORD(lParam));
-        Display();
-        break;
+        return 0;
     case WM_CLOSE:
         g_ContinueRendering = 0;
         PostQuitMessage(0);
         return 0;
-    case WM_KEYDOWN:
-        key = (unsigned int)wParam;
-        if(key == 32)
-        {
-            nStep++;
-            if(nStep > 5)
-                nStep = 0;
-        }
-        return 0;
     default:
-        // Nothing to do now
         break;
     }
-
-    // Pass All Unhandled Messages To DefWindowProc
     return DefWindowProc(hWnd,uMsg,wParam,lParam);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Setup the actual window and related state.
-// Create the window, find a pixel format, create the OpenGL context
 sge_bool SetupWindow(int nWidth, int nHeight)
 {
     sge_bool bRetVal = 1;
@@ -592,6 +564,6 @@ int main(int argc, char ** argv)
         Sleep(0);
     }
     Finalize();
-
+    KillWindow();
     return 0;
 }
