@@ -386,6 +386,7 @@ sge_bool SetupWindow(int nWidth, int nHeight)
     }
 
     // Setup GLEW which loads OGL function pointers
+    glewExperimental=1;
     err = glewInit();
     if (GLEW_OK != err)
     {
