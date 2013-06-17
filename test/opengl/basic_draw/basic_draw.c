@@ -310,9 +310,10 @@ sge_bool SetupWindow(int nWidth, int nHeight)
     TCHAR szClassName[50]  =  TEXT("OGL_CLASS");
 
     // Specify the important attributes we care about
-    int pixAttribs[] = { WGL_SUPPORT_OPENGL_ARB, 1, // Must support OGL rendering
+    int pixAttribs[] = {
+        WGL_SUPPORT_OPENGL_ARB, 1, // Must support OGL rendering
         WGL_DRAW_TO_WINDOW_ARB, 1, // pf that can run a window
-        WGL_ACCELERATION_ARB,   1, // must be HW accelerated
+        WGL_ACCELERATION_ARB,   WGL_FULL_ACCELERATION_ARB, // must be HW accelerated
         WGL_RED_BITS_ARB,       8, // 8 bits of red precision in window
         WGL_GREEN_BITS_ARB,     8, // 8 bits of green precision in window
         WGL_BLUE_BITS_ARB,      8, // 8 bits of blue precision in window
