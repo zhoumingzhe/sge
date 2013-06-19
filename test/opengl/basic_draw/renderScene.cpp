@@ -97,10 +97,10 @@ void initScene(LPVOID lpParam)
 
 	// Finally, load our texture
 
-	tGold.loadTexture2D("data\\textures\\golddiag.jpg", true);
+	tGold.loadTexture2D("data\\textures\\golddiag.dds", true);
 	tGold.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
 
-	tSnow.loadTexture2D("data\\textures\\snow.jpg", true);
+	tSnow.loadTexture2D("data\\textures\\snow.dds", true);
 	tSnow.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
 	glEnable(GL_TEXTURE_2D);
 }

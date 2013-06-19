@@ -1,6 +1,8 @@
 #include "common_header.h"
 
 #include "texture.h"
+#define VERMILION_BUILD_LIB
+#include "vermilion.h"
 
 CTexture::CTexture()
 {
@@ -20,6 +22,9 @@ Result:	Loads texture from a file, supports most
 
 bool CTexture::loadTexture2D(string a_sPath, bool bGenerateMipMaps)
 {
+    uiTexture = vglLoadTexture(a_sPath.c_str(), 0, 0);
+    glGenSamplers(1, &uiSampler);
+    sPath = a_sPath;
 	return true; // Success
 }
 
