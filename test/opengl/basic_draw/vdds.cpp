@@ -10,7 +10,6 @@
 #define VERMILION_BUILD_LIB
 #include "vermilion.h"
 
-#include <cstdint>
 #include <cstdio>
 #include <cstring>
 
@@ -187,46 +186,46 @@ enum
 
 struct DDS_PIXELFORMAT
 {
-    uint32_t                dwSize;
-    uint32_t                dwFlags;
-    uint32_t                dwFourCC;
-    uint32_t                dwRGBBitCount;
-    uint32_t                dwRBitMask;
-    uint32_t                dwGBitMask;
-    uint32_t                dwBBitMask;
-    uint32_t                dwABitMask;
+    unsigned int                dwSize;
+    unsigned int                dwFlags;
+    unsigned int                dwFourCC;
+    unsigned int                dwRGBBitCount;
+    unsigned int                dwRBitMask;
+    unsigned int                dwGBitMask;
+    unsigned int                dwBBitMask;
+    unsigned int                dwABitMask;
 };
 
 struct DDS_HEADER
 {
-    uint32_t                size;
-    uint32_t                flags;
-    uint32_t                height;
-    uint32_t                width;
-    uint32_t                pitch_or_linear_size;
-    uint32_t                depth;
-    uint32_t                mip_levels;
-    uint32_t                reserved[11];
+    unsigned int                size;
+    unsigned int                flags;
+    unsigned int                height;
+    unsigned int                width;
+    unsigned int                pitch_or_linear_size;
+    unsigned int                depth;
+    unsigned int                mip_levels;
+    unsigned int                reserved[11];
     DDS_PIXELFORMAT         ddspf;
-    uint32_t                caps1;
-    uint32_t                caps2;
-    uint32_t                caps3;
-    uint32_t                caps4;
-    uint32_t                reserved2;
+    unsigned int                caps1;
+    unsigned int                caps2;
+    unsigned int                caps3;
+    unsigned int                caps4;
+    unsigned int                reserved2;
 };
 
 struct DDS_HEADER_DXT10
 {
-    uint32_t                format;
-    uint32_t                dimension;
-    uint32_t                misc_flag;
-    uint32_t                array_size;
-    uint32_t                reserved;
+    unsigned int                format;
+    unsigned int                dimension;
+    unsigned int                misc_flag;
+    unsigned int                array_size;
+    unsigned int                reserved;
 };
 
 struct DDS_FILE_HEADER
 {
-    uint32_t                magic;
+    unsigned int                magic;
     DDS_HEADER              std_header;
     DDS_HEADER_DXT10        dxt10_header;
 };
@@ -607,7 +606,7 @@ void vglLoadDDS(const char* filename, vglImageData* image)
     fseek(f, (long)current_pos, SEEK_SET);
 
     image->totalDataSize = file_size - current_pos;
-    image->mip[0].data = new uint8_t [image->totalDataSize];
+    image->mip[0].data = new unsigned char [image->totalDataSize];
 
     fread(image->mip[0].data, file_size - current_pos, 1, f);
 

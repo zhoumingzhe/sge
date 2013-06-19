@@ -234,5 +234,26 @@ sge_inline sge_vec4f sge_vec4f_lerp_vec4f(sge_vec4f val1, sge_vec4f val2, sge_ve
     sge_vec4f result = sge_vec4f_mul(l, t);
     return sge_vec4f_add(result, val1);
 }
+
+sge_inline sge_vec4f sge_vec4f_cross4(sge_vec4f val1, sge_vec4f val2)
+{
+    // [ V1.y*V2.z - V1.z*V2.y, V1.z*V2.x - V1.x*V2.z, V1.x*V2.y - V1.y*V2.x ]
+    sge_vec4f t1 = _mm_shuffle_ps(val1, val1, sge_sse_shuffle(1, 2, 0, 3));
+    // z2,x2,y2,w2
+    sge_vec4f t2 = _mm_shuffle_ps(val2, val2, sge_sse_shuffle(2, 0, 1, 3));
+    // Perform the left operation
+    sge_vec4f ret = _mm_mul_ps(t1, t2);
+    // z1,x1,y1,w1
+    t1 = _mm_shuffle_ps(t1, t1, sge_sse_shuffle(1, 2, 0, 3));
+    // y2,z2,x2,w2
+    t2 = _mm_shuffle_ps(t2, t2, sge_sse_shuffle(2, 0, 3, 1));
+    // Perform the right operation
+    t1 = _mm_mul_ps(t1,t2);
+    // Subract the right from left, and return answer
+    ret = _mm_sub_ps(ret,t1);
+    // Set w to zero
+    return _mm_and_ps(ret, _mm_castsi128_ps(sge_vec4i_load_aligned(sge_w_mask)));
+}
+
 SGE_EXTERN_C_END
 #endif

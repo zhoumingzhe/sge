@@ -7,7 +7,6 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 
-#include <cstdint>
 
 extern "C" void vglLoadDDS(const char* filename, vglImageData* image);
 
@@ -19,7 +18,7 @@ void vglLoadImage(const char* filename, vglImageData* image)
 
 void vglUnloadImage(vglImageData* image)
 {
-    delete [] reinterpret_cast<uint8_t *>(image->mip[0].data);
+    delete [] reinterpret_cast<unsigned char *>(image->mip[0].data);
 }
 
 GLuint vglLoadTexture(const char* filename,
