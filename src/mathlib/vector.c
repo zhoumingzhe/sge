@@ -18,5 +18,6 @@ const sge_vec4i_aligned sge_x_mask= { 0xFFFFFFFF, 0, 0, 0};
 const sge_vec4i_aligned sge_y_mask= { 0, 0xFFFFFFFF, 0, 0};
 const sge_vec4i_aligned sge_z_mask= { 0, 0, 0xFFFFFFFF, 0};
 const sge_vec4i_aligned sge_w_mask= { 0, 0, 0, 0xFFFFFFFF};
+const sge_vec4i_aligned sge_xyz_mask= { 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0};
 
 

@@ -17,8 +17,8 @@ public:
 	bool initOpenGL(HINSTANCE hInstance, HWND* a_hWnd, int iMajorVersion, int iMinorVersion, void (*a_initScene)(LPVOID), void (*a_renderScene)(LPVOID), void(*a_releaseScene)(LPVOID), LPVOID lpParam);
 	
 	void resizeOpenGLViewportFull();
-	void setProjection3D(float fFOV, float fAspectRatio, float fNear, float fFar);
-	glm::mat4* getProjectionMatrix();
+	void setProjection3D(float width, float height, float fNear, float fFar);
+	sge_mat44f* getProjectionMatrix();
 
 	void render(LPVOID lpParam);
 	void releaseOpenGLControl(LPVOID lpParam);
@@ -50,7 +50,7 @@ private:
 	clock_t tLastSecond;
 
 	// Matrix for perspective projection
-	glm::mat4 mProjection;
+	sge_mat44f mProjection;
 
 	void (*initScene)(LPVOID lpParam), (*renderScene)(LPVOID lpParam), (*releaseScene)(LPVOID lpParam);
 };

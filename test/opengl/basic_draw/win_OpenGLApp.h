@@ -26,7 +26,6 @@ public:
 private:
 	HINSTANCE hInstance; // Application's instance
 	string sAppName;
-	HANDLE hMutex;
 
 	bool bAppActive; // To check if application is active (not minimized)
 	clock_t tLastFrame;

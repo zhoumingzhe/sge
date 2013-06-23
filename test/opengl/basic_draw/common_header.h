@@ -16,7 +16,7 @@ using namespace std;
 #define GLEW_STATIC
 #include <gl/glew.h>
 #include <gl/wglew.h>
-#include "glm/glm.hpp"
+#include "mathlib/matrix.h"
 
 // Some useful defines
 

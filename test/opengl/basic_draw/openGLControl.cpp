@@ -2,8 +2,6 @@
 
 #include "openGLControl.h"
 
-#include "glm/gtc/matrix_transform.hpp"
-
 bool COpenGLControl::bClassRegistered = false, COpenGLControl::bGlewInitialized = false;
 
 COpenGLControl::COpenGLControl()
@@ -209,9 +207,9 @@ Result:	Calculates projection matrix.
 
 /*---------------------------------------------*/
 
-void COpenGLControl::setProjection3D(float fFOV, float fAspectRatio, float fNear, float fFar)
+void COpenGLControl::setProjection3D(float width, float height, float fNear, float fFar)
 {
-	mProjection = glm::perspective(fFOV, fAspectRatio, fNear, fFar);
+	mProjection = sge_mat44f_perspective_rh_gl(width, height, fNear, fFar);
 }
 
 /*-----------------------------------------------
@@ -224,7 +222,7 @@ Result:	Retrieves pointer to projection matrix
 
 /*---------------------------------------------*/
 
-glm::mat4* COpenGLControl::getProjectionMatrix()
+sge_mat44f* COpenGLControl::getProjectionMatrix()
 {
 	return &mProjection;
 }

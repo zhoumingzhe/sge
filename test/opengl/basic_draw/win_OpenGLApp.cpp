@@ -102,7 +102,6 @@ Result:	Initializes app with specified (unique)
 bool COpenGLWinApp::initializeApp(string a_sAppName)
 {
 	sAppName = a_sAppName;
-	hMutex = CreateMutex(NULL, 1, sAppName.c_str());
 	if(GetLastError() == ERROR_ALREADY_EXISTS)
 	{
 		MessageBox(NULL, "This application already runs!", "Multiple Instances Found.", MB_ICONINFORMATION | MB_OK);
@@ -236,7 +235,6 @@ void COpenGLWinApp::shutdown()
 	DestroyWindow(hWnd);
 	UnregisterClass(sAppName.c_str(), hInstance);
 	COpenGLControl::unregisterSimpleOpenGLClass(hInstance);
-	ReleaseMutex(hMutex);
 }
 
 /*-----------------------------------------------
@@ -282,7 +280,7 @@ LRESULT CALLBACK COpenGLWinApp::msgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wPa
 
 		case WM_SIZE:
 			oglControl.resizeOpenGLViewportFull();
-			oglControl.setProjection3D(45.0f, float(LOWORD(lParam))/float(HIWORD(lParam)), 0.001f, 1000.0f);
+			oglControl.setProjection3D(0.002f*float(LOWORD(lParam))/float(HIWORD(lParam)), 0.002, 0.001f, 1000.0f);
 			break;
 
 		default:

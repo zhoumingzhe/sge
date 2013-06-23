@@ -37,6 +37,7 @@ extern const sge_vec4i_aligned sge_x_mask;
 extern const sge_vec4i_aligned sge_y_mask;
 extern const sge_vec4i_aligned sge_z_mask;
 extern const sge_vec4i_aligned sge_w_mask;
+extern const sge_vec4i_aligned sge_xyz_mask;
 
 //sse shuffle macro, internal use only
 #define sge_sse_shuffle(f0, f1, f2, f3)\
@@ -47,7 +48,7 @@ extern const sge_vec4i_aligned sge_w_mask;
 #define sge_vec4f_zero() _mm_setzero_ps()
 #define sge_vec4f_rep(val) _mm_set_ps1(val)
 #define sge_vec4f_init(x, y, z, w) _mm_set_ps(w, z, y, x)
-
+#define sge_vec4i_init(x, y, z, w) _mm_set_epi32(w, z, y, x)
 //------------------memory access function----------------
 
 #define sge_vec4f_load_aligned(addr) _mm_load_ps(addr)
@@ -172,6 +173,18 @@ sge_inline sge_vec4f sge_vec4f_celling(sge_vec4f val)
     return result;
 }
 
+sge_inline sge_vec4f sge_vec4f_select(sge_vec4f val1, sge_vec4f val2, sge_vec4f control)
+{
+    sge_vec4f t1 = _mm_andnot_ps(control, val1);
+    sge_vec4f t2 = _mm_and_ps(val2, control);
+    return _mm_or_ps(t1, t2);
+}
+
+sge_inline sge_vec4f sge_vec4f_neg(sge_vec4f val)
+{
+    sge_vec4f zero = _mm_setzero_ps();
+    return _mm_sub_ps(zero, val);
+}
 //--------------comparison functions-------------------
 sge_inline sge_bool sge_vec4f_eql(sge_vec4f val1, sge_vec4f val2)
 {

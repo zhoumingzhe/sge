@@ -6,9 +6,6 @@
 #include "texture.h"
 #include "vertexBufferObject.h"
 
-#include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
-
 /* One VBO, where all static data are stored now,
 in this tutorial vertex is stored as 3 floats for
 position and 2 floats for texture coordinate */
@@ -48,25 +45,26 @@ void initScene(LPVOID lpParam)
 
 	FOR(i, 36)
 	{
-		vboSceneObjects.addData(&vCubeVertices[i], sizeof(glm::vec3));
-		vboSceneObjects.addData(&vCubeTexCoords[i%6], sizeof(glm::vec2));
+		vboSceneObjects.addData(&vCubeVertices[i], sizeof(vec3));
+		vboSceneObjects.addData(&vCubeTexCoords[i%6], sizeof(vec2));
 	}
 
 	// Add pyramid to VBO
 
 	FOR(i, 12)
 	{
-		vboSceneObjects.addData(&vPyramidVertices[i], sizeof(glm::vec3));
-		vboSceneObjects.addData(&vPyramidTexCoords[i%3], sizeof(glm::vec2));
+		vboSceneObjects.addData(&vPyramidVertices[i], sizeof(vec3));
+		vboSceneObjects.addData(&vPyramidTexCoords[i%3], sizeof(vec2));
 	}
 
 	// Add ground to VBO
 
 	FOR(i, 6)
 	{
-		vboSceneObjects.addData(&vGround[i], sizeof(glm::vec3));
-		vCubeTexCoords[i] *= 5.0f;
-		vboSceneObjects.addData(&vCubeTexCoords[i%6], sizeof(glm::vec2));
+		vboSceneObjects.addData(&vGround[i], sizeof(vec3));
+		vCubeTexCoords[i][0] *= 5.0f;
+        vCubeTexCoords[i][1] *= 5.0f;
+		vboSceneObjects.addData(&vCubeTexCoords[i%6], sizeof(vec2));
 	}
 
 	vboSceneObjects.uploadDataToGPU(GL_STATIC_DRAW);
@@ -74,11 +72,11 @@ void initScene(LPVOID lpParam)
 	// Vertex positions start on zero index, and distance between two consecutive is sizeof whole
 	// vertex data (position and tex. coord)
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3)+sizeof(glm::vec2), 0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3)+sizeof(vec2), 0);
 	// Texture coordinates start right after positon, thus on (sizeof(glm::vec3)) index,
 	// and distance between two consecutive is sizeof whole vertex data (position and tex. coord)
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(glm::vec3)+sizeof(glm::vec2), (void*)sizeof(glm::vec3));
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vec3)+sizeof(vec2), (void*)sizeof(vec3));
 
 	// Load shaders and create shader program
 
@@ -149,10 +147,10 @@ void renderScene(LPVOID lpParam)
 
 	int iModelViewLoc = glGetUniformLocation(spMain.getProgramID(), "modelViewMatrix");
 	int iProjectionLoc = glGetUniformLocation(spMain.getProgramID(), "projectionMatrix");
-	glUniformMatrix4fv(iProjectionLoc, 1, GL_FALSE, glm::value_ptr(*oglControl->getProjectionMatrix()));
+	glUniformMatrix4fv(iProjectionLoc, 1, GL_FALSE, &(oglControl->getProjectionMatrix()->_11));
 
-	glm::mat4 mModelView = glm::lookAt(glm::vec3(0, 12, 27), glm::vec3(0, 0, 0), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 mCurrent;
+	sge_mat44f mModelView = sge_mat44f_lookat_rh(sge_vec4f_init(0, 12, 27, 0), sge_vec4f_init(0, 0, 0, 0), sge_vec4f_init(0.0f, 1.0f, 0.0f, 0.0f));
+	sge_mat44f mCurrent;
 
 	glBindVertexArray(uiVAO);
 
@@ -166,19 +164,35 @@ void renderScene(LPVOID lpParam)
 
 	// Rendering of cube
 
-	mCurrent = glm::translate(mModelView, glm::vec3(-8.0f, 0.0f, 0.0f));
-	mCurrent = glm::scale(mCurrent, glm::vec3(10.0f, 10.0f, 10.0f));
-	mCurrent = glm::rotate(mCurrent, fRotationAngleCube, glm::vec3(1.0f, 0.0f, 0.0f));
-	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, glm::value_ptr(mCurrent));
+    sge_mat44f trans = sge_mat44f_translate(-8.0f, 0.0f, 0.f);
+    mCurrent = sge_mat44f_mul(trans, mModelView);
+
+
+    sge_mat44f scale = sge_mat44f_scale(10.0f, 10.0f, 10.0f);
+    mCurrent = sge_mat44f_mul(scale, mCurrent);
+
+
+    sge_mat44f rotate = sge_mat44f_rotate(sge_vec4f_init(1.0f, 0.0f, 0.0f, 0.0f), fRotationAngleCube);
+    mCurrent = sge_mat44f_mul(rotate, mCurrent);
+
+	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, &(mCurrent._11));
 
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	// Rendering of pyramid
 
-	mCurrent = glm::translate(mModelView, glm::vec3(8.0f, 0.0f, 0.0f));
-	mCurrent = glm::scale(mCurrent, glm::vec3(10.0f, 10.0f, 10.0f));
-	mCurrent = glm::rotate(mCurrent, fRotationAnglePyramid, glm::vec3(0.0f, 1.0f, 0.0f));
-	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, glm::value_ptr(mCurrent));
+    trans = sge_mat44f_translate(8.0f, 0.0f, 0.0f);
+    mCurrent = sge_mat44f_mul(trans, mModelView);
+
+
+    scale = sge_mat44f_scale(10.0f, 10.0f, 10.0f);
+    mCurrent = sge_mat44f_mul(scale, mCurrent);
+
+
+    rotate = sge_mat44f_rotate(sge_vec4f_init(1.0f, 0.0f, 0.0f, 0.0f), fRotationAngleCube);
+    mCurrent = sge_mat44f_mul(rotate, mCurrent);
+
+	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, &(mCurrent._11));
 
 	glDrawArrays(GL_TRIANGLES, 36, 12);
 
@@ -186,7 +200,7 @@ void renderScene(LPVOID lpParam)
 
 	tSnow.bindTexture();
 
-	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, glm::value_ptr(mModelView));
+	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, &(mModelView._11));
 	glDrawArrays(GL_TRIANGLES, 48, 6);
 
 	// A little interaction for user
