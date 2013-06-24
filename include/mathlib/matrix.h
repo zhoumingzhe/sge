@@ -227,39 +227,45 @@ sge_inline sge_mat44f sge_mat44f_scale(float x, float y, float z)
 
 sge_inline sge_mat44f sge_mat44f_rotate(sge_vec4f axis, float angle)
 {
-    sge_vec4f n = sge_vec4f_nmlz_fast(axis);
-    float    fSinAngle = sin(angle);
-    float    fCosAngle = cos(angle);
+    sge_vec4f V0, V1, V2;
+    sge_vec4f R0, R1, R2;
 
-    sge_vec4f C2 = _mm_set_ps1(1.0f - fCosAngle);
-    sge_vec4f C1 = _mm_set_ps1(fCosAngle);
-    sge_vec4f C0 = _mm_set_ps1(fSinAngle);
+    sge_mat44f M;
+
+    sge_vec4f n = sge_vec4f_nmlz_fast(axis);
+    float    fSinAngle = sinf(angle);
+    float    fCosAngle = cosf(angle);
 
     sge_vec4f N0 = _mm_shuffle_ps(n, n,sge_sse_shuffle(1,2,0,3));
     sge_vec4f N1 = _mm_shuffle_ps(n, n,sge_sse_shuffle(2,0,1,3));
 
-    sge_vec4f V0 = _mm_mul_ps(C2, N0);
+    sge_vec4f C0 = _mm_set_ps1(fSinAngle);
+    sge_vec4f C1 = _mm_set_ps1(fCosAngle);
+    sge_vec4f C2 = _mm_set_ps1(1.0f);
+    C2 = sge_vec4f_sub(C2, C1);
+
+
+    V0 = _mm_mul_ps(C2, N0);
     V0 = _mm_mul_ps(V0, N1);
 
-    sge_vec4f R0 = _mm_mul_ps(C2, n);
+    R0 = _mm_mul_ps(C2, n);
     R0 = _mm_mul_ps(R0, n);
     R0 = _mm_add_ps(R0, C1);
 
-    sge_vec4f R1 = _mm_mul_ps(C0, n);
+    R1 = _mm_mul_ps(C0, n);
     R1 = _mm_add_ps(R1, V0);
-    sge_vec4f R2 = _mm_mul_ps(C0, n);
+    R2 = _mm_mul_ps(C0, n);
     R2 = _mm_sub_ps(V0,R2);
 
     V0 = _mm_and_ps(R0,_mm_castsi128_ps(sge_vec4i_load_aligned(sge_xyz_mask)));
-    sge_vec4f V1 = _mm_shuffle_ps(R1,R2,sge_sse_shuffle(0,2,1,2));
+    V1 = _mm_shuffle_ps(R1,R2,sge_sse_shuffle(0,2,1,2));
     V1 = _mm_shuffle_ps(V1,V1,sge_sse_shuffle(1,2,3,0));
-    sge_vec4f V2 = _mm_shuffle_ps(R1,R2,_MM_SHUFFLE(0,0,1,1));
+    V2 = _mm_shuffle_ps(R1,R2,sge_sse_shuffle(1,1,0,0));
     V2 = _mm_shuffle_ps(V2,V2, sge_sse_shuffle(0,2,0,2));
 
     R2 = _mm_shuffle_ps(V0,V1,sge_sse_shuffle(0,3,0,1));
     R2 = _mm_shuffle_ps(R2,R2,sge_sse_shuffle(0,2,3,1));
 
-    sge_mat44f M;
     M.r[0] = R2;
 
     R2 = _mm_shuffle_ps(V0,V1,sge_sse_shuffle(1,3,2,3));

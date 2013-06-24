@@ -197,7 +197,7 @@ Result:	Main application body infinite loop.
 void COpenGLWinApp::appBody()
 {
 	MSG msg;
-	while(1)
+	for(;;)
 	{
 		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
@@ -280,7 +280,7 @@ LRESULT CALLBACK COpenGLWinApp::msgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wPa
 
 		case WM_SIZE:
 			oglControl.resizeOpenGLViewportFull();
-			oglControl.setProjection3D(0.002f*float(LOWORD(lParam))/float(HIWORD(lParam)), 0.002, 0.001f, 1000.0f);
+			oglControl.setProjection3D(0.002f*float(LOWORD(lParam))/float(HIWORD(lParam)), 0.002f, 0.001f, 1000.0f);
 			break;
 
 		default:
