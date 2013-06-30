@@ -1,9 +1,6 @@
 #define VERMILION_BUILD_LIB
 #include "vermilion.h"
 
-// #include <GL3/gl3.h>
-// #include <GL3/gl3w.h>
-
 #define GLEW_STATIC
 #include <GL/glew.h>
 

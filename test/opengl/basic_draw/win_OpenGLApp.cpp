@@ -6,31 +6,10 @@ COpenGLWinApp appMain;
 
 char Keys::kp[256] = {0};
 
-/*-----------------------------------------------
-
-Name:		key
-
-Params:	iKey - virtual key code
-
-Result:	Return true if key is pressed.
-
-/*---------------------------------------------*/
-
 int Keys::key(int iKey)
 {
 	return (GetAsyncKeyState(iKey)>>15)&1;
 }
-
-/*-----------------------------------------------
-
-Name:		onekey
-
-Params:	iKey - virtual key code
-
-Result:	Return true if key was pressed, but only
-			once (the key must be released).
-
-/*---------------------------------------------*/
 
 int Keys::onekey(int iKey)
 {
@@ -39,32 +18,11 @@ int Keys::onekey(int iKey)
 	return 0;
 }
 
-/*-----------------------------------------------
-
-Name:	resetTimer
-
-Params:	none
-
-Result:	Resets application timer (for example
-			after re-activation of application).
-
-/*---------------------------------------------*/
-
 void COpenGLWinApp::resetTimer()
 {
 	tLastFrame = clock();
 	fFrameInterval = 0.0f;
 }
-
-/*-----------------------------------------------
-
-Name:		updateTimer
-
-Params:	none
-
-Result:	Updates application timer.
-
-/*---------------------------------------------*/
 
 void COpenGLWinApp::updateTimer()
 {
@@ -73,31 +31,11 @@ void COpenGLWinApp::updateTimer()
 	tLastFrame = tCur;
 }
 
-/*-----------------------------------------------
-
-Name:		sof
-
-Params:	fVal
-
-Result:	Stands for speed optimized float.
-
-/*---------------------------------------------*/
 
 float COpenGLWinApp::sof(float fVal)
 {
 	return fVal*fFrameInterval;
 }
-
-/*-----------------------------------------------
-
-Name:		initializeApp
-
-Params:	a_sAppName
-
-Result:	Initializes app with specified (unique)
-			application identifier.
-
-/*---------------------------------------------*/
 
 bool COpenGLWinApp::initializeApp(string a_sAppName)
 {
@@ -109,16 +47,6 @@ bool COpenGLWinApp::initializeApp(string a_sAppName)
 	}
 	return 1;
 }
-
-/*-----------------------------------------------
-
-Name:		registerAppClass
-
-Params:	a_hInstance - application instance handle
-
-Result:	Registers application window class.
-
-/*---------------------------------------------*/
 
 LRESULT CALLBACK globalMessageHandler(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -148,16 +76,6 @@ void COpenGLWinApp::registerAppClass(HINSTANCE a_hInstance)
 	RegisterClassEx(&wcex);
 }
 
-/*-----------------------------------------------
-
-Name:		createWindow
-
-Params:	sTitle - title of created window
-
-Result:	Creates main application window.
-
-/*---------------------------------------------*/
-
 bool COpenGLWinApp::createWindow(string sTitle)
 {
 	if(MessageBox(NULL, "Would you like to run in fullscreen?", "Fullscreen", MB_ICONQUESTION | MB_YESNO) == IDYES)
@@ -184,16 +102,6 @@ bool COpenGLWinApp::createWindow(string sTitle)
 	return true;
 }
 
-/*-----------------------------------------------
-
-Name:		appBody
-
-Params:	none
-
-Result:	Main application body infinite loop.
-
-/*---------------------------------------------*/
-
 void COpenGLWinApp::appBody()
 {
 	MSG msg;
@@ -217,17 +125,6 @@ void COpenGLWinApp::appBody()
 	}
 }
 
-/*-----------------------------------------------
-
-Name:		shutdown
-
-Params:	none
-
-Result:	Shuts down application and releases used
-			memory.
-
-/*---------------------------------------------*/
-
 void COpenGLWinApp::shutdown()
 {
 	oglControl.releaseOpenGLControl(&oglControl);
@@ -236,16 +133,6 @@ void COpenGLWinApp::shutdown()
 	UnregisterClass(sAppName.c_str(), hInstance);
 	COpenGLControl::unregisterSimpleOpenGLClass(hInstance);
 }
-
-/*-----------------------------------------------
-
-Name:		msgHandlerMain
-
-Params:	whatever
-
-Result:	Application messages handler.
-
-/*---------------------------------------------*/
 
 LRESULT CALLBACK COpenGLWinApp::msgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -289,38 +176,18 @@ LRESULT CALLBACK COpenGLWinApp::msgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wPa
 	return 0;
 }
 
-/*-----------------------------------------------
-
-Name:	getInstance
-
-Params:	none
-
-Result:	Returns application instance.
-
-/*---------------------------------------------*/
-
 HINSTANCE COpenGLWinApp::getInstance()
 {
 	return hInstance;
 }
 
-/*-----------------------------------------------
-
-Name:	msgHandlerMain
-
-Params:	whatever
-
-Result:	Application messages handler.
-
-/*---------------------------------------------*/
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR sCmdLine, int iShow)
 {
-	if(!appMain.initializeApp("06_opengl_3_3"))
+	if(!appMain.initializeApp("Basic_Draw"))
 		return 0;
 	appMain.registerAppClass(hInstance);
 
-	if(!appMain.createWindow("06.) Textures - Tutorial by Michal Bubnar (www.mbsoftworks.sk)"))
+	if(!appMain.createWindow("Basic_Draw"))
 		return 0;
 	appMain.resetTimer();
 

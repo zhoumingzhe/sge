@@ -6,9 +6,6 @@
 #include "texture.h"
 #include "vertexBufferObject.h"
 
-/* One VBO, where all static data are stored now,
-in this tutorial vertex is stored as 3 floats for
-position and 2 floats for texture coordinate */
 
 CVertexBufferObject vboSceneObjects;
 UINT uiVAO; // And one VAO
@@ -17,17 +14,6 @@ CShader shVertex, shFragment;
 CShaderProgram spMain;
 
 CTexture tGold, tSnow;
-
-/*-----------------------------------------------
-
-Name:		initScene
-
-Params:	lpParam - Pointer to anything you want.
-
-Result:	Initializes OpenGL features that will
-			be used.
-
-/*---------------------------------------------*/
 
 #include "static_geometry.h"
 
@@ -68,17 +54,11 @@ void initScene(LPVOID lpParam)
 	}
 
 	vboSceneObjects.uploadDataToGPU(GL_STATIC_DRAW);
-	
-	// Vertex positions start on zero index, and distance between two consecutive is sizeof whole
-	// vertex data (position and tex. coord)
+
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3)+sizeof(vec2), 0);
-	// Texture coordinates start right after positon, thus on (sizeof(glm::vec3)) index,
-	// and distance between two consecutive is sizeof whole vertex data (position and tex. coord)
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vec3)+sizeof(vec2), (void*)sizeof(vec3));
-
-	// Load shaders and create shader program
 
 	shVertex.loadShader("data\\shaders\\shader.vert", GL_VERTEX_SHADER);
 	shFragment.loadShader("data\\shaders\\shader.frag", GL_FRAGMENT_SHADER);
@@ -93,8 +73,6 @@ void initScene(LPVOID lpParam)
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
 
-	// Finally, load our texture
-
 	tGold.loadTexture2D("data\\textures\\golddiag.dds", true);
 	tGold.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
 
@@ -102,16 +80,6 @@ void initScene(LPVOID lpParam)
 	tSnow.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
 	glEnable(GL_TEXTURE_2D);
 }
-
-/*-----------------------------------------------
-
-Name:		renderScene
-
-Params:	lpParam - Pointer to anything you want.
-
-Result:	Renders whole scene.
-
-/*---------------------------------------------*/
 
 float fRotationAngleCube = 0.0f, fRotationAnglePyramid = 0.0f;
 float fCubeRotationSpeed = 0.0f, fPyramidRotationSpeed = 0.0f;
@@ -153,9 +121,6 @@ void renderScene(LPVOID lpParam)
 	sge_mat44f mCurrent;
 
 	glBindVertexArray(uiVAO);
-
-	// Texture binding - we set GL_ACTIVE_TEXTURE0, and then we tell fragment shader,
-	// that gSampler variable will fetch data from GL_ACTIVE_TEXTURE0
 
 	int iSamplerLoc = glGetUniformLocation(spMain.getProgramID(), "gSampler");
 	glUniform1i(iSamplerLoc, 0);
@@ -233,15 +198,6 @@ void renderScene(LPVOID lpParam)
 	oglControl->swapBuffers();
 }
 
-/*-----------------------------------------------
-
-Name:	releaseScene
-
-Params:	lpParam - Pointer to anything you want.
-
-Result:	Releases OpenGL scene.
-
-/*---------------------------------------------*/
 
 void releaseScene(LPVOID lpParam)
 {

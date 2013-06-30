@@ -10,17 +10,6 @@ COpenGLControl::COpenGLControl()
 	iCurrentFPS = 0;
 }
 
-/*-----------------------------------------------
-
-Name:	initGLEW
-
-Params:	none
-
-Result:	Creates fake window and OpenGL rendering
-		context, within which GLEW is initialized.
-
-/*---------------------------------------------*/
-
 bool COpenGLControl::initGLEW(HINSTANCE hInstance)
 {
 	if(bGlewInitialized)return true;
@@ -73,25 +62,6 @@ bool COpenGLControl::initGLEW(HINSTANCE hInstance)
 
 	return bResult;
 }
-
-/*-----------------------------------------------
-
-Name:	initOpenGL
-
-Params:	hInstance - application instance
-		a_hWnd - window to init OpenGL into
-		a_iMajorVersion - Major version of OpenGL
-		a_iMinorVersion - Minor version of OpenGL
-		a_initScene - pointer to init function
-		a_renderScene - pointer to render function
-		a_releaseScene - optional parameter of release
-						function
-
-Result:	Initializes OpenGL rendering context
-		of specified version. If succeeds,
-		returns true.
-
-/*---------------------------------------------*/
 
 bool COpenGLControl::initOpenGL(HINSTANCE hInstance, HWND* a_hWnd, int iMajorVersion, int iMinorVersion, void (*a_initScene)(LPVOID), void (*a_renderScene)(LPVOID), void(*a_releaseScene)(LPVOID), LPVOID lpParam)
 {
@@ -178,16 +148,6 @@ bool COpenGLControl::initOpenGL(HINSTANCE hInstance, HWND* a_hWnd, int iMajorVer
 	return true;
 }
 
-/*-----------------------------------------------
-
-Name:	resizeOpenGLViewportFull
-
-Params:	none
-
-Result:	Resizes viewport to full window.
-
-/*---------------------------------------------*/
-
 void COpenGLControl::resizeOpenGLViewportFull()
 {
 	if(hWnd == NULL)return;
@@ -195,47 +155,15 @@ void COpenGLControl::resizeOpenGLViewportFull()
 	glViewport(0, 0, rRect.right, rRect.bottom);
 }
 
-/*-----------------------------------------------
-
-Name:	setProjection3D
-
-Params:	fFOV - field of view angle
-		fAspectRatio - aspect ration of width/height
-		fNear, fFar - distance of near and far clipping plane
-
-Result:	Calculates projection matrix.
-
-/*---------------------------------------------*/
-
 void COpenGLControl::setProjection3D(float width, float height, float fNear, float fFar)
 {
 	mProjection = sge_mat44f_perspective_rh_gl(width, height, fNear, fFar);
 }
 
-/*-----------------------------------------------
-
-Name:	getProjectionMatrix()
-
-Params:	none
-
-Result:	Retrieves pointer to projection matrix
-
-/*---------------------------------------------*/
-
 sge_mat44f* COpenGLControl::getProjectionMatrix()
 {
 	return &mProjection;
 }
-
-/*-----------------------------------------------
-
-Name:	registerSimpleOpenGLClass
-
-Params:	hInstance - application instance
-
-Result:	Registers simple OpenGL window class.
-
-/*---------------------------------------------*/
 
 void COpenGLControl::registerSimpleOpenGLClass(HINSTANCE hInstance)
 {
@@ -259,16 +187,6 @@ void COpenGLControl::registerSimpleOpenGLClass(HINSTANCE hInstance)
 	bClassRegistered = true;
 }
 
-/*-----------------------------------------------
-
-Name:	unregisterSimpleOpenGLClass
-
-Params:	hInstance - application instance
-
-Result:	Unregisters simple OpenGL window class.
-
-/*---------------------------------------------*/
-
 void COpenGLControl::unregisterSimpleOpenGLClass(HINSTANCE hInstance)
 {
 	if(bClassRegistered)
@@ -277,17 +195,6 @@ void COpenGLControl::unregisterSimpleOpenGLClass(HINSTANCE hInstance)
 		bClassRegistered = false;
 	}
 }
-
-/*-----------------------------------------------
-
-Name:		msgHandlerSimpleOpenGLClass
-
-Params:	whatever
-
-Result:	Handles messages from windows that use
-			simple OpenGL class.
-
-/*---------------------------------------------*/
 
 LRESULT CALLBACK msgHandlerSimpleOpenGLClass(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -305,47 +212,15 @@ LRESULT CALLBACK msgHandlerSimpleOpenGLClass(HWND hWnd, UINT uiMsg, WPARAM wPara
 	return 0;
 }
 
-/*-----------------------------------------------
-
-Name:	swapBuffers
-
-Params:	none
-
-Result:	Swaps back and front buffer.
-
-/*---------------------------------------------*/
-
 void COpenGLControl::swapBuffers()
 {
 	SwapBuffers(hDC);
 }
 
-/*-----------------------------------------------
-
-Name:	makeCurrent
-
-Params:	none
-
-Result:	Makes current device and OpenGL rendering
-		context to those associated with OpenGL
-		control.
-
-/*---------------------------------------------*/
-
 void COpenGLControl::makeCurrent()
 {
 	wglMakeCurrent(hDC, hRC);
 }
-
-/*-----------------------------------------------
-
-Name:	render
-
-Params:	lpParam - pointer to whatever you want
-
-Result:	Calls previously set render function.
-
-/*---------------------------------------------*/
 
 void COpenGLControl::render(LPVOID lpParam)
 {
@@ -360,31 +235,10 @@ void COpenGLControl::render(LPVOID lpParam)
 	iCurrentFPS++;
 }
 
-/*-----------------------------------------------
-
-Name:	getFPS
-
-Params:	none
-
-Result:	Returns FPS count in last second.
-
-/*---------------------------------------------*/
-
 int COpenGLControl::getFPS()
 {
 	return iFPSCount;
 }
-
-/*-----------------------------------------------
-
-Name:	releaseOpenGLControl
-
-Params:	lpParam - pointer to whatever you want
-
-Result:	Calls previously set release function
-		and deletes rendering context.
-
-/*---------------------------------------------*/
 
 void COpenGLControl::releaseOpenGLControl(LPVOID lpParam)
 {
@@ -396,16 +250,6 @@ void COpenGLControl::releaseOpenGLControl(LPVOID lpParam)
 
 	hWnd = NULL;
 }
-
-/*-----------------------------------------------
-
-Name:	setVerticalSynchronization
-
-Params: bEnabled - whether to enable V-Sync
-
-Result:	Guess what it does :)
-
-/*---------------------------------------------*/
 
 bool COpenGLControl::setVerticalSynchronization(bool bEnabled)
 {
