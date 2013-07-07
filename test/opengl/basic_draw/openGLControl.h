@@ -31,8 +31,6 @@ public:
 
 	bool setVerticalSynchronization(bool bEnabled);
 
-	int getFPS();
-
 	COpenGLControl();
 
 private:
@@ -44,10 +42,6 @@ private:
 	static bool bClassRegistered;
 	static bool bGlewInitialized;
 	int iMajorVersion, iMinorVersion;
-
-	// Used for FPS calculation
-	int iFPSCount, iCurrentFPS;
-	clock_t tLastSecond;
 
 	// Matrix for perspective projection
 	sge_mat44f mProjection;

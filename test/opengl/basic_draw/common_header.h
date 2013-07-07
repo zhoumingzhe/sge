@@ -1,16 +1,8 @@
 // Header files of frequent usage
 
-#include <ctime>
 #include <windows.h>
 
-#include <algorithm>
-#include <cmath>
-#include <cstring>
-#include <vector>
-#include <sstream>
 #include <queue>
-#include <map>
-#include <set>
 
 using namespace std;
 #define GLEW_STATIC

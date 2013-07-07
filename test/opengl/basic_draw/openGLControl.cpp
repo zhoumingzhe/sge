@@ -6,8 +6,6 @@ bool COpenGLControl::bClassRegistered = false, COpenGLControl::bGlewInitialized 
 
 COpenGLControl::COpenGLControl()
 {
-	iFPSCount = 0;
-	iCurrentFPS = 0;
 }
 
 bool COpenGLControl::initGLEW(HINSTANCE hInstance)
@@ -224,21 +222,9 @@ void COpenGLControl::makeCurrent()
 
 void COpenGLControl::render(LPVOID lpParam)
 {
-	clock_t tCurrent = clock();
-	if( (tCurrent-tLastSecond) >= CLOCKS_PER_SEC)
-	{
-		tLastSecond += CLOCKS_PER_SEC;
-		iFPSCount = iCurrentFPS;
-		iCurrentFPS = 0;
-	}
 	if(renderScene)renderScene(lpParam);
-	iCurrentFPS++;
 }
 
-int COpenGLControl::getFPS()
-{
-	return iFPSCount;
-}
 
 void COpenGLControl::releaseOpenGLControl(LPVOID lpParam)
 {

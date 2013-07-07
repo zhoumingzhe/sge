@@ -85,27 +85,6 @@ float fRotationAngleCube = 0.0f, fRotationAnglePyramid = 0.0f;
 float fCubeRotationSpeed = 0.0f, fPyramidRotationSpeed = 0.0f;
 const float PIover180 = 3.1415f/180.0f;
 
-void displayTextureFiltersInfo()
-{
-	char buf[255];
-	string sInfoMinification[] = 
-	{
-		"Nearest",
-		"Bilinear"
-	};
-	string sInfoMagnification[] =
-	{
-		"Nearest",
-		"Bilinear",
-		"Nearest on closest mipmap",
-		"Bilinear on closest mipmap",
-		"Trilinear"
-	};
-	sprintf(buf, "Mag. Filter: %s, Min. Filter: %s", sInfoMinification[tSnow.getMagnificationFilter()].c_str(), 
-																	sInfoMagnification[tSnow.getMinificationFilter()-2].c_str());
-	SetWindowText(appMain.hWnd, buf);
-}
-
 void renderScene(LPVOID lpParam)
 {
 	// Typecast lpParam to COpenGLControl pointer
@@ -168,33 +147,6 @@ void renderScene(LPVOID lpParam)
 	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, &(mModelView._11));
 	glDrawArrays(GL_TRIANGLES, 48, 6);
 
-	// A little interaction for user
-
-	if(Keys::key(VK_UP))fCubeRotationSpeed -= appMain.sof(60.0f);
-	if(Keys::key(VK_DOWN))fCubeRotationSpeed += appMain.sof(60.0f);
-	if(Keys::key(VK_RIGHT))fPyramidRotationSpeed += appMain.sof(60.0f);
-	if(Keys::key(VK_LEFT))fPyramidRotationSpeed -= appMain.sof(60.0f);
-
-	fRotationAngleCube += appMain.sof(fCubeRotationSpeed);
-	fRotationAnglePyramid += appMain.sof(fPyramidRotationSpeed);
-
-	// If user presses escape, quit the application
-	if(Keys::onekey(VK_ESCAPE))PostQuitMessage(0);
-
-	// F1 and F2 change the texture filterings and set window text about that
-	if(Keys::onekey(VK_F1))
-	{
-		tGold.setFiltering((tGold.getMagnificationFilter()+1)%2, tGold.getMinificationFilter());
-		tSnow.setFiltering((tSnow.getMagnificationFilter()+1)%2, tSnow.getMinificationFilter());
-		displayTextureFiltersInfo();
-	}
-	if(Keys::onekey(VK_F2))
-	{
-		int iNewMinFilter = tSnow.getMinificationFilter() == TEXTURE_FILTER_MIN_TRILINEAR ? TEXTURE_FILTER_MIN_NEAREST : tSnow.getMinificationFilter()+1;
-		tSnow.setFiltering(tSnow.getMagnificationFilter(), iNewMinFilter); 
-		tGold.setFiltering(tGold.getMagnificationFilter(), iNewMinFilter);
-		displayTextureFiltersInfo();
-	}
 	oglControl->swapBuffers();
 }
 
