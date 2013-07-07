@@ -26,7 +26,7 @@ sge_int32 sge_call_func( struct sge_script_obj* obj, const char* name )
     return obj->vptr->call_func(obj, name);
 }
 
-void* sge_get_native_interface( struct sge_script_obj* obj )
+void* sge_get_native_script_interface( struct sge_script_obj* obj )
 {
     return obj->vptr->get_native(obj);
 }
