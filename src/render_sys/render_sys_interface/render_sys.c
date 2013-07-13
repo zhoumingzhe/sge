@@ -27,6 +27,12 @@ struct sge_render_sys* sge_create_render_sys(struct sge_window_sys* window_sys,
     }
 }
 
+struct sge_render_context* sge_create_render_context(
+                    struct sge_render_sys* render_sys,
+                    struct sge_window_obj* window_obj)
+{
+    return render_sys->vptr->create_render_context(render_sys, window_obj);
+}
 void sge_render_sys_destroy(struct sge_render_sys* render_sys)
 {
     render_sys->vptr->destory(render_sys);

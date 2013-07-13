@@ -40,11 +40,18 @@ void win32_set_handler_resize(struct sge_window_obj* obj, on_resize func)
     win32_obj->resize_func = func;
 }
 
+void* win32_get_native_obj(struct sge_window_obj* obj)
+{
+    struct sge_window_obj_win32* win32_obj = get_container(obj, struct sge_window_obj_win32, obj);
+    return win32_obj->hwnd;
+}
+
 static const struct sge_window_obj_table win32_window_obj_vptr =
 {
     win32_show,
     win32_obj_destroy,
-    win32_set_handler_resize
+    win32_set_handler_resize,
+    win32_get_native_obj
 };
 
 static struct sge_window_obj* win32_create_window(struct sge_window_sys* window_sys)

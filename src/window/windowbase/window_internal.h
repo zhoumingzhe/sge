@@ -28,5 +28,6 @@ struct sge_window_obj_table
     void (*show)(struct sge_window_obj*);
     void (*destroy)(struct sge_window_obj*);
     void (*set_handler_resize)(struct sge_window_obj*, on_resize);
+    void* (*get_native_obj)(struct sge_window_obj*);
 };
 #endif

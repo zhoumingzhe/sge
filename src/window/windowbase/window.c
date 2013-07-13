@@ -31,3 +31,8 @@ void sge_window_set_handler_resize(struct sge_window_obj* obj, on_resize func)
 {
     obj->vptr->set_handler_resize(obj, func);
 }
+
+void* sge_window_get_native_obj(struct sge_window_obj* obj)
+{
+    return obj->vptr->get_native_obj(obj);
+}

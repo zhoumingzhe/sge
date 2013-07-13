@@ -1,8 +1,13 @@
 #include <windows.h>
 #define GLEW_STATIC
-#include "GL/glew.h"
+#include <GL/glew.h>
+#include <GL/wglew.h>
 #include "basedefine/types.h"
-
+#include "basedefine/utility.h"
+#include "memory/sge_memory.h"
+#include "window/window.h"
+#include "../platform_support.h"
+#include "../render_context_opengl.h"
 LRESULT CALLBACK msgHandlerSimpleOpenGLClass(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     PAINTSTRUCT ps;
@@ -81,7 +86,85 @@ sge_bool init_glew()
 
     wglMakeCurrent(0, 0);
     wglDeleteContext(hRCFake);
+    ReleaseDC(hWndFake, hDc);
     DestroyWindow(hWndFake);
 
     return 1;
+}
+
+struct sge_render_context_opengl
+{
+    struct sge_render_context render_context_base;
+    HWND hwnd;
+    HDC hdc;
+    HGLRC hrc;
+};
+
+static void win32_context_destroy(struct sge_render_context* context)
+{
+    struct sge_render_context_opengl* context_opengl =
+        get_container(context, struct sge_render_context_opengl, render_context_base);
+    wglMakeCurrent(0, 0);
+    wglDeleteContext(context_opengl->hrc);
+    ReleaseDC(context_opengl->hwnd, context_opengl->hdc);
+    sge_free(context_opengl);
+}
+
+static const struct sge_render_context_table win32_context_table = 
+{
+    win32_context_destroy
+};
+
+struct sge_render_context* create_context(struct sge_render_sys* render_sys, struct sge_window_obj* window_obj)
+{
+    HWND hwnd = (HWND)sge_window_get_native_obj(window_obj);
+    HDC hDC = GetDC(hwnd);
+    HGLRC hRC;
+    PIXELFORMATDESCRIPTOR pfd;
+
+    if(WGLEW_ARB_create_context && WGLEW_ARB_pixel_format)
+    {
+        const int iPixelFormatAttribList[] =
+        {
+            WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+            WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+            WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+            WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+            WGL_COLOR_BITS_ARB, 32,
+            WGL_DEPTH_BITS_ARB, 24,
+            WGL_STENCIL_BITS_ARB, 8,
+            0 // End of attributes list
+        };
+        int iContextAttribs[] =
+        {
+            WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+            WGL_CONTEXT_MINOR_VERSION_ARB, 3,
+            WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+            0 // End of attributes list
+        };
+
+        int iPixelFormat, iNumFormats;
+        wglChoosePixelFormatARB(hDC, iPixelFormatAttribList, NULL, 1, &iPixelFormat, (UINT*)&iNumFormats);
+
+        if(!SetPixelFormat(hDC, iPixelFormat, &pfd))return 0;
+
+        hRC = wglCreateContextAttribsARB(hDC, 0, iContextAttribs);
+
+        if(hRC)
+        {
+            struct sge_render_context_opengl* context = (struct sge_render_context_opengl*)
+                sge_malloc(sizeof(struct sge_render_context_opengl));
+            context->render_context_base.vptr = &win32_context_table;
+            context->hwnd = hwnd;
+            context->hdc = hDC;
+            context->hrc = hRC;
+            wglMakeCurrent(hDC, hRC);
+
+            return &context->render_context_base;
+        }
+        else
+            return 0;
+    }
+    else
+        return 0;
 }
