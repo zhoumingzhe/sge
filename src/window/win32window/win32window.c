@@ -17,32 +17,14 @@ struct sge_window_obj_win32
     on_resize resize_func;
 };
 
-
-void win32_show(struct sge_window_obj* obj, sge_int32 left, sge_int32 top,
-                sge_int32 width, sge_int32 height)
+void win32_show(struct sge_window_obj* obj)
 {
     struct sge_window_obj_win32* win32_obj = get_container(obj, struct sge_window_obj_win32, obj);
-    sge_runtime_assert(!win32_obj->hwnd);
 
-    if(MessageBox(NULL, "Would you like to run in fullscreen?", "Fullscreen", MB_ICONQUESTION | MB_YESNO) == IDYES)
-    {
-        DEVMODE dmSettings = {0};
-        EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmSettings); // Get current display settings
-
-        win32_obj->hwnd = CreateWindowEx(0, "basic_draw", "basic_draw", WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, // This is the commonly used style for fullscreen
-            0, 0, dmSettings.dmPelsWidth, dmSettings.dmPelsHeight, NULL,
-            NULL, 0, win32_obj);
-    }
-    else
-    {
-        win32_obj->hwnd = CreateWindowEx(0, "basic_draw", "basic_draw", WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
-            0, 0, CW_USEDEFAULT, CW_USEDEFAULT, NULL,
-            NULL, 0, win32_obj);
-    }
     ShowWindow(win32_obj->hwnd, SW_SHOW);
-
     UpdateWindow(win32_obj->hwnd);
 }
+
 void win32_obj_destroy(struct sge_window_obj* obj)
 {
     struct sge_window_obj_win32* win32_obj = get_container(obj, struct sge_window_obj_win32, obj);
@@ -51,6 +33,7 @@ void win32_obj_destroy(struct sge_window_obj* obj)
     DestroyWindow(win32_obj->hwnd);
     sge_free(win32_obj);
 }
+
 void win32_set_handler_resize(struct sge_window_obj* obj, on_resize func)
 {
     struct sge_window_obj_win32* win32_obj = get_container(obj, struct sge_window_obj_win32, obj);
@@ -70,6 +53,23 @@ static struct sge_window_obj* win32_create_window(struct sge_window_sys* window_
     ret->obj.vptr = &win32_window_obj_vptr;
     ret->hwnd = 0;
     ret->resize_func = 0;
+
+    if(MessageBox(NULL, "Would you like to run in fullscreen?", "Fullscreen", MB_ICONQUESTION | MB_YESNO) == IDYES)
+    {
+        DEVMODE dmSettings = {0};
+        EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &dmSettings); // Get current display settings
+
+        ret->hwnd = CreateWindowEx(0, "basic_draw", "basic_draw", WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, // This is the commonly used style for fullscreen
+            0, 0, dmSettings.dmPelsWidth, dmSettings.dmPelsHeight, NULL,
+            NULL, 0, ret);
+    }
+    else
+    {
+        ret->hwnd = CreateWindowEx(0, "basic_draw", "basic_draw", WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+            0, 0, CW_USEDEFAULT, CW_USEDEFAULT, NULL,
+            NULL, 0, ret);
+    }
+
     return &ret->obj;
 }
 
@@ -172,5 +172,4 @@ struct sge_window_sys* sge_window_sys_create_win32()
     ret->window_sys.vptr = &win32_window_sys_vptr;
     ret->idle_func = 0;
     return &ret->window_sys;
-
 }
