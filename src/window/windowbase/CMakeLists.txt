@@ -1,0 +1,5 @@
+include_directories(../../../include)
+include_directories(../../../include/window)
+AUX_SOURCE_DIRECTORY(. WINDOWBASE_SRC)
+add_library(windowbase ${WINDOWBASE_SRC})
+set_property(TARGET windowbase PROPERTY FOLDER src/window)

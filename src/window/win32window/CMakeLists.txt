@@ -1,0 +1,6 @@
+include_directories(../windowbase)
+include_directories(../../../include)
+include_directories(../../../include/window)
+AUX_SOURCE_DIRECTORY(. WIN32WINDOW_SRC)
+add_library(win32window ${WIN32WINDOW_SRC})
+set_property(TARGET win32window PROPERTY FOLDER src/window)
