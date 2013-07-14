@@ -1,5 +1,0 @@
-include_directories(../include)
-aux_source_directory(. GLUT_SRCS) 
-add_definitions(-DFREEGLUT_STATIC -D_CRT_SECURE_NO_WARNINGS -DGLUT_DISABLE_ATEXIT_HACK -DFREEGLUT_LIB_PRAGMAS=0)
-add_library(freeglut ${GLUT_SRCS})
-set_property(TARGET freeglut PROPERTY FOLDER external/opengl)
