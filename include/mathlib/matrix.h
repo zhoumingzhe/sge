@@ -1,5 +1,6 @@
 #ifndef MATHLIB_MATRIX_H
 #define MATHLIB_MATRIX_H
+#include <math.h>
 #include "vector.h"
 SGE_EXTERN_C_START
 typedef sge_align(16) union sge_mat44f

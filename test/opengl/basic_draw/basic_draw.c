@@ -37,6 +37,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR sCmdLine,
     g_render_context = context;
     initScene();
     sge_window_set_handler_resize(obj, RESIZE);
+
     sge_window_show(obj);
     sge_window_sys_set_handler_idle(window_sys, IDLE);
     sge_window_sys_main_loop(window_sys);

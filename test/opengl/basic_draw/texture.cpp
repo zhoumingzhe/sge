@@ -1,5 +1,5 @@
 #include "common_header.h"
-
+#include <string>
 #include "texture.h"
 #define VERMILION_BUILD_LIB
 #include "vermilion.h"

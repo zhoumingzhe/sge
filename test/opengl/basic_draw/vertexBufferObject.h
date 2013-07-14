@@ -9,6 +9,7 @@ Purpose:	Wraps OpenGL vertex buffer
 
 ********************************/
 
+#include <vector>
 class CVertexBufferObject
 {
 public:

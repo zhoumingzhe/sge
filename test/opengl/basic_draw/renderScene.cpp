@@ -1,12 +1,22 @@
 #include "common_header.h"
 
-#include "win_OpenGLApp.h"
 
 #include "shaders.h"
 #include "texture.h"
 #include "vertexBufferObject.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
+    void initScene();
+    void renderScene();
+    void releaseScene();
+
+#ifdef __cplusplus
+};
+#endif
 CVertexBufferObject vboSceneObjects;
 UINT uiVAO; // And one VAO
 

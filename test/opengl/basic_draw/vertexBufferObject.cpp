@@ -1,5 +1,5 @@
 #include "common_header.h"
-
+#include <vector>
 #include "vertexBufferObject.h"
 
 CVertexBufferObject::CVertexBufferObject()
