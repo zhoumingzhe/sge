@@ -18,7 +18,7 @@ void sge_window_sys_destory(struct sge_window_sys* window_sys);
 
 //window system handlers
 typedef void (*on_idle)(struct sge_window_sys* window_sys);
-void sge_window_sys_set_handler_idle(struct sge_window_sys* window_sys);
+void sge_window_sys_set_handler_idle(struct sge_window_sys* window_sys, on_idle func);
 
 //window functions
 void sge_window_show(struct sge_window_obj* obj);

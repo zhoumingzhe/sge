@@ -16,6 +16,11 @@ void sge_window_sys_destory(struct sge_window_sys* window_sys)
     window_sys->vptr->destory(window_sys);
 }
 
+void sge_window_sys_set_handler_idle(struct sge_window_sys* window_sys, on_idle func)
+{
+    window_sys->vptr->set_handler_on_idle(window_sys, func);
+}
+
 //window functions
 void sge_window_show(struct sge_window_obj* obj)
 {

@@ -17,7 +17,7 @@ CTexture tGold, tSnow;
 
 #include "static_geometry.h"
 
-void initScene(LPVOID lpParam)
+void initScene()
 {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -85,16 +85,18 @@ float fRotationAngleCube = 0.0f, fRotationAnglePyramid = 0.0f;
 float fCubeRotationSpeed = 0.0f, fPyramidRotationSpeed = 0.0f;
 const float PIover180 = 3.1415f/180.0f;
 
-void renderScene(LPVOID lpParam)
+extern "C"
 {
-	// Typecast lpParam to COpenGLControl pointer
-	COpenGLControl* oglControl = (COpenGLControl*)lpParam;
+    extern sge_mat44f mProjection;
+}
+void renderScene()
+{
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	int iModelViewLoc = glGetUniformLocation(spMain.getProgramID(), "modelViewMatrix");
 	int iProjectionLoc = glGetUniformLocation(spMain.getProgramID(), "projectionMatrix");
-	glUniformMatrix4fv(iProjectionLoc, 1, GL_FALSE, &(oglControl->getProjectionMatrix()->_11));
+	glUniformMatrix4fv(iProjectionLoc, 1, GL_FALSE, &(mProjection._11));
 
 	sge_mat44f mModelView = sge_mat44f_lookat_rh(sge_vec4f_init(0, 12, 27, 0), sge_vec4f_init(0, 0, 0, 0), sge_vec4f_init(0.0f, 1.0f, 0.0f, 0.0f));
 	sge_mat44f mCurrent;
@@ -147,11 +149,11 @@ void renderScene(LPVOID lpParam)
 	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, &(mModelView._11));
 	glDrawArrays(GL_TRIANGLES, 48, 6);
 
-	oglControl->swapBuffers();
+	//oglControl->swapBuffers();
 }
 
 
-void releaseScene(LPVOID lpParam)
+void releaseScene()
 {
 	spMain.deleteProgram();
 

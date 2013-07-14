@@ -9,6 +9,7 @@ struct sge_render_context
 
 struct sge_render_context_table
 {
+    void (*present)(struct sge_render_context*);
     void (*destory)(struct sge_render_context*);
 };
 

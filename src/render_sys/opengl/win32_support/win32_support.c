@@ -100,6 +100,13 @@ struct sge_render_context_opengl
     HGLRC hrc;
 };
 
+static void win32_context_present(struct sge_render_context* context)
+{
+    struct sge_render_context_opengl* context_opengl =
+        get_container(context, struct sge_render_context_opengl, render_context_base);
+    SwapBuffers(context_opengl->hdc);
+}
+
 static void win32_context_destroy(struct sge_render_context* context)
 {
     struct sge_render_context_opengl* context_opengl =
@@ -112,6 +119,7 @@ static void win32_context_destroy(struct sge_render_context* context)
 
 static const struct sge_render_context_table win32_context_table = 
 {
+    win32_context_present,
     win32_context_destroy
 };
 
