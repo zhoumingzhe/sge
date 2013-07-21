@@ -1,3 +1,4 @@
+include_directories(../../include)
 include_directories(../../include/memory)
 
 AUX_SOURCE_DIRECTORY(. MEMORY_SRC)
