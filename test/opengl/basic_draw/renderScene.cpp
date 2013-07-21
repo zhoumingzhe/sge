@@ -4,15 +4,15 @@
 #include "shaders.h"
 #include "texture.h"
 #include "vertexBufferObject.h"
-
+#include "render_sys/render_context.h"
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-    void initScene();
-    void renderScene();
-    void releaseScene();
+    struct sge_render_context;
+    void initScene(struct sge_render_context*);
+    void renderScene(struct sge_render_context*);
+    void releaseScene(struct sge_render_context*);
 
 #ifdef __cplusplus
 };
@@ -27,9 +27,9 @@ CTexture tGold, tSnow;
 
 #include "static_geometry.h"
 
-void initScene()
+void initScene(struct sge_render_context*)
 {
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	vboSceneObjects.createVBO();
 	glGenVertexArrays(1, &uiVAO); // Create one VAO
@@ -81,7 +81,7 @@ void initScene()
 	spMain.useProgram();
 
 	glEnable(GL_DEPTH_TEST);
-	glClearDepth(1.0);
+	//glClearDepth(1.0);
 
 	tGold.loadTexture2D("data\\textures\\golddiag.dds", true);
 	tGold.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
@@ -99,10 +99,10 @@ extern "C"
 {
     extern sge_mat44f mProjection;
 }
-void renderScene()
+void renderScene(struct sge_render_context* context)
 {
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	sge_render_context_clear(context, clear_depth|clear_color, sge_vec4f_zero(), 1.0f, 0);
 
 	int iModelViewLoc = glGetUniformLocation(spMain.getProgramID(), "modelViewMatrix");
 	int iProjectionLoc = glGetUniformLocation(spMain.getProgramID(), "projectionMatrix");
@@ -163,7 +163,7 @@ void renderScene()
 }
 
 
-void releaseScene()
+void releaseScene(struct sge_render_context*)
 {
 	spMain.deleteProgram();
 

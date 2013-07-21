@@ -8,9 +8,9 @@
 #include "GL/glew.h"
 
 
-void initScene();
-void renderScene();
-void releaseScene();
+void initScene(struct sge_render_context*);
+void renderScene(struct sge_render_context*);
+void releaseScene(struct sge_render_context*);
 
 struct sge_render_context* g_render_context;
 sge_mat44f mProjection;
@@ -22,7 +22,7 @@ void RESIZE(struct sge_window_obj* obj, sge_int32 width, sge_int32 height)
 
 void IDLE(struct sge_window_sys* window_sys)
 {
-    renderScene();
+    renderScene(g_render_context);
     sge_render_context_present(g_render_context);
 }
 
@@ -35,7 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR sCmdLine,
     struct sge_window_obj* obj = sge_window_sys_create_window(window_sys);
     struct sge_render_context* context = sge_create_render_context(render_sys, obj);
     g_render_context = context;
-    initScene();
+    initScene(context);
     sge_window_set_handler_resize(obj, RESIZE);
 
     sge_window_show(obj);
@@ -45,7 +45,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR sCmdLine,
     sge_render_context_destroy(context);
     sge_window_destroy(obj);
 
-    releaseScene();
+    releaseScene(g_render_context);
     sge_render_sys_destroy(render_sys);
     sge_window_sys_destory(window_sys);
     UNUSED(i);

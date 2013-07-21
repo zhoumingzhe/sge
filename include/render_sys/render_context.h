@@ -1,6 +1,8 @@
 #ifndef RENDERSYS_RENDERCONTEXT_H
 #define RENDERSYS_RENDERCONTEXT_H
 #include "basedefine/types.h"
+#include "mathlib/vector.h"
+
 struct sge_render_context;
 
 SGE_EXTERN_C_START
@@ -8,5 +10,13 @@ SGE_EXTERN_C_START
 void sge_render_context_present(struct sge_render_context*);
 void sge_render_context_destroy(struct sge_render_context*);
 
-SGE_EXTERN_C_START
+enum sge_render_context_clear_mask
+{
+    clear_color = 1,
+    clear_depth = 2,
+    clear_stencil = 4
+};
+void sge_render_context_clear(struct sge_render_context*, sge_int32 mask, sge_vec4f color, sge_float32 depth, sge_int32 stencil);
+
+SGE_EXTERN_C_END
 #endif
