@@ -3,14 +3,19 @@
 #include "basedefine/types.h"
 #include "render_context_internal.h"
 
+//internal cache
+struct sge_render_context_state_cache
+{
+    sge_vec4f clear_color;
+    sge_float32 clear_depth;
+    sge_int32 clear_stencil;
+};
+
 struct sge_render_context_opengl
 {
     struct sge_render_context render_context_base;
 
-    //internal cache
-    sge_vec4f clear_color;
-    sge_float32 clear_depth;
-    sge_int32 clear_stencil;
+    struct sge_render_context_state_cache cache;
 };
 
 void init_opengl_context(struct sge_render_context_opengl* context);
