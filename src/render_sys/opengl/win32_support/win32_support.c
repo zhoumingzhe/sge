@@ -129,7 +129,8 @@ static const struct sge_render_context_table opengl_context_table =
 {
     opengl_context_present,
     opengl_context_destroy,
-    opengl_context_clear
+    opengl_context_clear,
+    opengl_create_vertex_buffer,
 };
 
 struct sge_render_context* create_context(struct sge_render_sys* render_sys, struct sge_window_obj* window_obj)

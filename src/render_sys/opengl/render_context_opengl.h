@@ -23,4 +23,5 @@ void init_opengl_context(struct sge_render_context_opengl* context);
 void opengl_context_clear(struct sge_render_context* context, sge_int32 mask,
                           sge_vec4f color, sge_float32 depth, sge_int32 stencil);
 
+struct sge_render_veretex_buffer* opengl_create_vertex_buffer(struct sge_render_context* context);
 #endif

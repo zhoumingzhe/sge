@@ -16,3 +16,8 @@ void sge_render_context_clear(struct sge_render_context* render_context,
 {
     render_context->vptr->clear(render_context, mask, color, depth, stencil);
 }
+
+struct sge_render_veretex_buffer* sge_render_context_create_vertex_buffer(struct sge_render_context* render_context)
+{
+    return render_context->vptr->create_vertex_buffer(render_context);
+}

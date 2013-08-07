@@ -56,3 +56,8 @@ void opengl_context_clear(struct sge_render_context* context, sge_int32 mask,
 
     glClear(glclearmask);
 }
+
+struct sge_render_veretex_buffer* opengl_create_vertex_buffer(struct sge_render_context* context)
+{
+    return 0;
+}
