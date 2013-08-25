@@ -4,22 +4,18 @@
 #include "window_internal.h"
 #include "memory/sge_memory.h"
 
-struct sge_window_sys_win32
-{
-    struct sge_window_sys window_sys;
+BEGIN_IMPLEMENTATION(sge_window_sys_win32, sge_window_sys)
     on_idle idle_func;
-};
+END_IMPLEMENTATION
 
-struct sge_window_obj_win32
-{
-    struct sge_window_obj obj;
+BEGIN_IMPLEMENTATION(sge_window_obj_win32, sge_window_obj)
     HWND hwnd;
     on_resize resize_func;
-};
+END_IMPLEMENTATION
 
 void win32_show(struct sge_window_obj* obj)
 {
-    struct sge_window_obj_win32* win32_obj = get_container(obj, struct sge_window_obj_win32, obj);
+    VIRTUAL_CONTAINER(win32_obj, obj, struct sge_window_obj_win32);
 
     ShowWindow(win32_obj->hwnd, SW_SHOW);
     UpdateWindow(win32_obj->hwnd);
@@ -27,7 +23,7 @@ void win32_show(struct sge_window_obj* obj)
 
 void win32_obj_destroy(struct sge_window_obj* obj)
 {
-    struct sge_window_obj_win32* win32_obj = get_container(obj, struct sge_window_obj_win32, obj);
+    VIRTUAL_CONTAINER(win32_obj, obj, struct sge_window_obj_win32);
 
     sge_runtime_assert(!!win32_obj->hwnd);
     DestroyWindow(win32_obj->hwnd);
@@ -36,28 +32,25 @@ void win32_obj_destroy(struct sge_window_obj* obj)
 
 void win32_set_handler_resize(struct sge_window_obj* obj, on_resize func)
 {
-    struct sge_window_obj_win32* win32_obj = get_container(obj, struct sge_window_obj_win32, obj);
+    VIRTUAL_CONTAINER(win32_obj, obj, struct sge_window_obj_win32);
     win32_obj->resize_func = func;
 }
 
 void* win32_get_native_obj(struct sge_window_obj* obj)
 {
-    struct sge_window_obj_win32* win32_obj = get_container(obj, struct sge_window_obj_win32, obj);
+    VIRTUAL_CONTAINER(win32_obj, obj, struct sge_window_obj_win32);
     return win32_obj->hwnd;
 }
-
-static const struct sge_window_obj_table win32_window_obj_vptr =
-{
+BEGIN_VTABLE_INSTANCE(sge_window_obj_win32, sge_window_obj)
     win32_show,
     win32_obj_destroy,
     win32_set_handler_resize,
     win32_get_native_obj
-};
+END_VTABLE_INSTANCE
 
 static struct sge_window_obj* win32_create_window(struct sge_window_sys* window_sys)
 {
-    struct sge_window_obj_win32* ret = (struct sge_window_obj_win32*)sge_malloc(sizeof(struct sge_window_obj_win32));
-    ret->obj.vptr = &win32_window_obj_vptr;
+    CREATE_INSTANCE(ret, sge_window_obj_win32, sge_malloc);
     ret->hwnd = 0;
     ret->resize_func = 0;
 
@@ -77,12 +70,12 @@ static struct sge_window_obj* win32_create_window(struct sge_window_sys* window_
             NULL, 0, ret);
     }
 
-    return &ret->obj;
+    return GET_INTERFACE(ret);
 }
 
 static void win32_loop(struct sge_window_sys* window_sys)
 {
-    struct sge_window_sys_win32* win32_obj = get_container(window_sys, struct sge_window_sys_win32, window_sys);
+    VIRTUAL_CONTAINER(win32_obj, window_sys, struct sge_window_sys_win32);
     MSG msg;
     for(;;)
     {
@@ -105,24 +98,23 @@ static void win32_loop(struct sge_window_sys* window_sys)
 
 static void win32_destory(struct sge_window_sys* window_sys)
 {
-    struct sge_window_sys_win32* ret = get_container(window_sys, struct sge_window_sys_win32, window_sys);
+    VIRTUAL_CONTAINER(ret, window_sys, struct sge_window_sys_win32);
     UnregisterClass("basic_draw", 0);
     sge_free(ret);
 }
 
 static void win32_set_on_idle(struct sge_window_sys* window_sys, on_idle func)
 {
-    struct sge_window_sys_win32* ret = get_container(window_sys, struct sge_window_sys_win32, window_sys);
+    VIRTUAL_CONTAINER(ret, window_sys, struct sge_window_sys_win32);
     ret->idle_func = func;
 }
 
-static const struct sge_window_sys_table win32_window_sys_vptr =
-{
+BEGIN_VTABLE_INSTANCE(sge_window_sys_win32, sge_window_sys)
     win32_create_window,
     win32_loop,
     win32_destory,
     win32_set_on_idle
-};
+END_VTABLE_INSTANCE
 
 LRESULT CALLBACK msgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -147,7 +139,7 @@ LRESULT CALLBACK msgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lPa
 
     case WM_SIZE:
         if(obj_win32->resize_func)
-            obj_win32->resize_func(&obj_win32->obj, LOWORD(lParam), HIWORD(lParam));
+            obj_win32->resize_func(GET_INTERFACE(obj_win32), LOWORD(lParam), HIWORD(lParam));
         break;
 
     default:
@@ -158,8 +150,8 @@ LRESULT CALLBACK msgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lPa
 
 struct sge_window_sys* sge_window_sys_create_win32()
 {
-    struct sge_window_sys_win32* ret = 0;
     WNDCLASSEX wcex;
+    CREATE_INSTANCE(ret, sge_window_sys_win32, sge_malloc);
 
     memset(&wcex, 0, sizeof(WNDCLASSEX));
     wcex.cbSize = sizeof(WNDCLASSEX);
@@ -175,8 +167,6 @@ struct sge_window_sys* sge_window_sys_create_win32()
 
     RegisterClassEx(&wcex);
 
-    ret = (struct sge_window_sys_win32*)sge_malloc(sizeof(struct sge_window_sys_win32));
-    ret->window_sys.vptr = &win32_window_sys_vptr;
     ret->idle_func = 0;
-    return &ret->window_sys;
+    return GET_INTERFACE(ret);
 }
