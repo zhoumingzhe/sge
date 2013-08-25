@@ -2,15 +2,12 @@
 #include <lualib.h>
 #include <lauxlib.h>
 #include <string.h>
-#include "basedefine/utility.h"
 #include "script_internal.h"
 #include "memory/sge_memory.h"
 
-struct sge_lua_obj
-{
-    struct sge_script_obj obj;
+BEGIN_IMPLEMENTATION(sge_lua_obj, sge_script_obj)
     lua_State *l;
-};
+END_IMPLEMENTATION
 
 static void lua_report_error(lua_State*L)
 {
@@ -26,7 +23,7 @@ static enum sge_script_type lua_get_type()
 
 static void lua_destory (struct sge_script_obj* obj)
 {
-    struct sge_lua_obj* pobj = get_container(obj, struct sge_lua_obj, obj);
+    VIRTUAL_CONTAINER(pobj, obj, struct sge_lua_obj);
 
     lua_close(pobj->l);
     sge_free(pobj);
@@ -34,7 +31,7 @@ static void lua_destory (struct sge_script_obj* obj)
 
 static sge_bool lua_exec_file(struct sge_script_obj* obj, const char* file)
 {
-    struct sge_lua_obj* pobj = get_container(obj, struct sge_lua_obj, obj);
+    VIRTUAL_CONTAINER(pobj, obj, struct sge_lua_obj);
     lua_State* l = pobj->l;
 
     int status = luaL_loadfile(l, file);
@@ -47,7 +44,7 @@ static sge_bool lua_exec_file(struct sge_script_obj* obj, const char* file)
 
 static sge_bool lua_exec_buffer(struct sge_script_obj* obj, const char* buffer)
 {
-    struct sge_lua_obj* pobj = get_container(obj, struct sge_lua_obj, obj);
+    VIRTUAL_CONTAINER(pobj, obj, struct sge_lua_obj);
     lua_State* l = pobj->l;
 
     int status = luaL_loadbuffer(l, buffer, strlen(buffer), buffer);
@@ -60,7 +57,7 @@ static sge_bool lua_exec_buffer(struct sge_script_obj* obj, const char* buffer)
 
 static sge_int32 lua_call_func(struct sge_script_obj* obj, const char* name)
 {
-    struct sge_lua_obj* pobj = get_container(obj, struct sge_lua_obj, obj);
+    VIRTUAL_CONTAINER(pobj, obj, struct sge_lua_obj);
     lua_State* l = pobj->l;
 
     lua_getglobal(l, name);
@@ -73,28 +70,23 @@ static sge_int32 lua_call_func(struct sge_script_obj* obj, const char* name)
 
 static void* lua_get_native(struct sge_script_obj* obj)
 {
-    struct sge_lua_obj* pobj = get_container(obj, struct sge_lua_obj, obj);
+    VIRTUAL_CONTAINER(pobj, obj, struct sge_lua_obj);
     return pobj->l;
 }
-static const struct sge_script_obj_table lua_vptr =
-{
+BEGIN_VTABLE_INSTANCE(sge_lua_obj, sge_script_obj)
     lua_get_type,
     lua_destory,
     lua_exec_file,
     lua_exec_buffer,
     lua_call_func,
     lua_get_native
-};
+END_VTABLE_INSTANCE
 
 struct sge_script_obj* sge_create_lua_script()
 {
-    struct sge_lua_obj * ret = 0;
-    lua_State *l = luaL_newstate();
-    luaL_openlibs(l);
+    CREATE_INSTANCE(ret, sge_lua_obj, sge_malloc);
+    ret->l = luaL_newstate();
+    luaL_openlibs(ret->l);
 
-    ret = (struct sge_lua_obj *)sge_malloc(sizeof(struct sge_lua_obj));
-    ret->obj.vptr = &lua_vptr;
-    ret->l = l;
-
-    return &ret->obj;
+    return GET_INTERFACE(ret);
 }
