@@ -11,12 +11,9 @@ struct sge_render_context_state_cache
     sge_int32 clear_stencil;
 };
 
-struct sge_render_context_opengl
-{
-    struct sge_render_context render_context_base;
-
+BEGIN_IMPLEMENTATION(sge_render_context_opengl, sge_render_context)
     struct sge_render_context_state_cache cache;
-};
+END_IMPLEMENTATION
 
 void init_opengl_context(struct sge_render_context_opengl* context);
 

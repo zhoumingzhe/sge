@@ -91,47 +91,38 @@ sge_bool init_glew()
 
     return 1;
 }
-
-struct sge_render_context_opengl_win32
-{
-    struct sge_render_context_opengl render_context_opengl;
+BEGIN_IMPLEMENTATION(sge_render_context_opengl_win32, sge_render_context_opengl)
     HWND hwnd;
     HDC hdc;
     HGLRC hrc;
-};
+END_IMPLEMENTATION
 
 static void opengl_context_present(struct sge_render_context* context)
 {
-    struct sge_render_context_opengl* context_opengl =
-        get_container(context, struct sge_render_context_opengl, render_context_base);
+    VIRTUAL_CONTAINER(context_opengl, context, struct sge_render_context_opengl);
 
-    struct sge_render_context_opengl_win32* context_opengl_win32 =
-        get_container(context_opengl, struct sge_render_context_opengl_win32, render_context_opengl);
+    VIRTUAL_CONTAINER(context_opengl_win32, context_opengl, struct sge_render_context_opengl_win32);
 
     SwapBuffers(context_opengl_win32->hdc);
 }
 
 static void opengl_context_destroy(struct sge_render_context* context)
 {
-    struct sge_render_context_opengl* context_opengl =
-        get_container(context, struct sge_render_context_opengl, render_context_base);
+    VIRTUAL_CONTAINER(context_opengl, context, struct sge_render_context_opengl);
 
-    struct sge_render_context_opengl_win32* context_opengl_win32 =
-        get_container(context_opengl, struct sge_render_context_opengl_win32, render_context_opengl);
+    VIRTUAL_CONTAINER(context_opengl_win32, context_opengl, struct sge_render_context_opengl_win32);
 
     wglMakeCurrent(0, 0);
     wglDeleteContext(context_opengl_win32->hrc);
     ReleaseDC(context_opengl_win32->hwnd, context_opengl_win32->hdc);
     sge_free(context_opengl);
 }
-
-static const struct sge_render_context_table opengl_context_table = 
-{
+BEGIN_VTABLE_INSTANCE(sge_render_context_opengl_win32, sge_render_context)
     opengl_context_present,
     opengl_context_destroy,
     opengl_context_clear,
     opengl_create_vertex_buffer,
-};
+END_VTABLE_INSTANCE
 
 struct sge_render_context* create_context(struct sge_render_sys* render_sys, struct sge_window_obj* window_obj)
 {
@@ -170,16 +161,14 @@ struct sge_render_context* create_context(struct sge_render_sys* render_sys, str
 
         if(hRC)
         {
-            struct sge_render_context_opengl_win32* context = (struct sge_render_context_opengl_win32*)
-                sge_malloc(sizeof(struct sge_render_context_opengl_win32));
-            context->render_context_opengl.render_context_base.vptr = &opengl_context_table;
-            init_opengl_context(&context->render_context_opengl);
+            CREATE_INSTANCE2(context, sge_render_context_opengl_win32, sge_malloc);
+            init_opengl_context(GET_INTERFACE(context));
             context->hwnd = hwnd;
             context->hdc = hDC;
             context->hrc = hRC;
             wglMakeCurrent(hDC, hRC);
 
-            return &context->render_context_opengl.render_context_base;
+            return GET_INTERFACE2(context);
         }
         else
             return 0;

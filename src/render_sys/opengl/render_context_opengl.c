@@ -17,8 +17,7 @@ void init_opengl_context(struct sge_render_context_opengl* context)
 void opengl_context_clear(struct sge_render_context* context, sge_int32 mask,
                           sge_vec4f color, sge_float32 depth, sge_int32 stencil)
 {
-    struct sge_render_context_opengl* context_opengl =
-        get_container(context, struct sge_render_context_opengl, render_context_base);
+    VIRTUAL_CONTAINER(context_opengl, context, struct sge_render_context_opengl);
 
     sge_int32 glclearmask = 0;
 
