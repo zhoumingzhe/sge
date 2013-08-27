@@ -14,20 +14,17 @@ struct sge_render_context* opengl_create_context(struct sge_render_sys* render_s
     return create_context(render_sys, window_obj);
 }
 
-static const struct sge_render_sys_table opengl_render_sys_vptr = 
-{
+BEGIN_VTABLE_INSTANCE(sge_render_sys_opengl, sge_render_sys)
     opengl_create_context,
     opengl_destory
-};
+END_VTABLE_INSTANCE
 
 struct sge_render_sys* create_render_sys()
 {
     if(init_glew())
     {
-        struct sge_render_sys_opengl* render_sys =
-            (struct sge_render_sys_opengl*)sge_malloc(sizeof(struct sge_render_sys_opengl));
-        render_sys->render_sys_base.vptr = &opengl_render_sys_vptr;
-        return &render_sys->render_sys_base;
+        CREATE_INSTANCE(render_sys, sge_render_sys_opengl, sge_malloc);
+        return GET_INTERFACE(render_sys);
     }
     return 0;
 }

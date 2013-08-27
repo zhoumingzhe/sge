@@ -41,4 +41,10 @@ struct type* ptr = (struct type*)allocate(sizeof(struct type));\
 #define GET_INTERFACE(ptr)\
     &ptr->_father
 
+#define CREATE_INSTANCE2(ptr, type, allocate)\
+struct type* ptr = (struct type*)allocate(sizeof(struct type));\
+    ptr->_father._father.vt = &_##type##_vtable
+
+#define GET_INTERFACE2(ptr)\
+    &ptr->_father._father
 #endif
