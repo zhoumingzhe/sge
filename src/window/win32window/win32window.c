@@ -48,11 +48,11 @@ BEGIN_VTABLE_INSTANCE(sge_window_obj_win32, sge_window_obj)
     win32_get_native_obj
 END_VTABLE_INSTANCE
 
-static struct sge_window_obj* win32_create_window(struct sge_window_sys* window_sys)
+static struct sge_window_obj* win32_create_window(struct sge_window_sys* window_sys, on_resize func)
 {
     CREATE_INSTANCE(ret, sge_window_obj_win32, sge_malloc);
     ret->hwnd = 0;
-    ret->resize_func = 0;
+    ret->resize_func = func;
 
     if(MessageBox(NULL, "Would you like to run in fullscreen?", "Fullscreen", MB_ICONQUESTION | MB_YESNO) == IDYES)
     {

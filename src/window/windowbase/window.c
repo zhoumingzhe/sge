@@ -1,9 +1,9 @@
 #include "window.h"
 #include "window_internal.h"
 
-struct sge_window_obj* sge_window_sys_create_window(struct sge_window_sys* window_sys)
+struct sge_window_obj* sge_window_sys_create_window(struct sge_window_sys* window_sys, on_resize func)
 {
-    return VTABLE_CALL(window_sys, create_window)(window_sys);
+    return VTABLE_CALL(window_sys, create_window)(window_sys, func);
 }
 
 void sge_window_sys_main_loop(struct sge_window_sys* window_sys)

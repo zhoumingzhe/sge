@@ -4,7 +4,7 @@
 #include <basedefine/polymorphic.h>
 
 BEGIN_VTABLE(sge_window_sys)
-    struct sge_window_obj* (*create_window)(struct sge_window_sys*);
+    struct sge_window_obj* (*create_window)(struct sge_window_sys*, on_resize);
     void (*main_loop)(struct sge_window_sys*);
     void (*destory)(struct sge_window_sys*);
     void (*set_handler_on_idle)(struct sge_window_sys*, on_idle);
