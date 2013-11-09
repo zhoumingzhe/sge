@@ -25,16 +25,16 @@ sge_inline sge_mat44f sge_mat44f_identity()
     ret.r[3] = sge_vec4f_load_aligned(sge_vec4f_0001);
     return ret;
 }
-
-sge_inline sge_mat44f sge_mat44f_transpose(sge_mat44f m)
+#define sge_mat44f_transpose(m) _sge_mat44f_transpose(&m)
+sge_inline sge_mat44f _sge_mat44f_transpose(const sge_mat44f* m)
 {
-    sge_vec4f t1 = _mm_shuffle_ps(m.r[0], m.r[1], sge_sse_shuffle(0,1,0,1));
+    sge_vec4f t1 = _mm_shuffle_ps(m->r[0], m->r[1], sge_sse_shuffle(0,1,0,1));
     // x.z,x.w,y.z,y.w
-    sge_vec4f t3 = _mm_shuffle_ps(m.r[0],m.r[1],sge_sse_shuffle(2,3,2,3));
+    sge_vec4f t3 = _mm_shuffle_ps(m->r[0],m->r[1],sge_sse_shuffle(2,3,2,3));
     // z.x,z.y,w.x,w.y
-    sge_vec4f t2 = _mm_shuffle_ps(m.r[2],m.r[3],sge_sse_shuffle(0,1,0,1));
+    sge_vec4f t2 = _mm_shuffle_ps(m->r[2],m->r[3],sge_sse_shuffle(0,1,0,1));
     // z.z,z.w,w.z,w.w
-    sge_vec4f t4 = _mm_shuffle_ps(m.r[2],m.r[3],sge_sse_shuffle(2,3,2,3));
+    sge_vec4f t4 = _mm_shuffle_ps(m->r[2],m->r[3],sge_sse_shuffle(2,3,2,3));
     sge_mat44f result;
 
     // x.x,y.x,z.x,w.x
@@ -158,57 +158,58 @@ sge_inline sge_mat44f sge_mat44f_lookat_rh(sge_vec4f eye, sge_vec4f center, sge_
 
     return sge_mat44f_transpose(M);
 }
-sge_inline sge_mat44f sge_mat44f_mul(sge_mat44f mat1, sge_mat44f mat2)
+#define sge_mat44f_mul(mat1, mat2) _sge_mat44f_mul(&mat1, &mat2)
+sge_inline sge_mat44f _sge_mat44f_mul(sge_mat44f *mat1, sge_mat44f *mat2)
 {
     sge_mat44f mResult;
-    sge_vec4f vW = mat1.r[0];
+    sge_vec4f vW = mat1->r[0];
     sge_vec4f vX = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(0,0,0,0));
     sge_vec4f vY = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(1,1,1,1));
     sge_vec4f vZ = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(2,2,2,2));
     vW = _mm_shuffle_ps(vW,vW,_MM_SHUFFLE(3,3,3,3));
-    vX = _mm_mul_ps(vX,mat2.r[0]);
-    vY = _mm_mul_ps(vY,mat2.r[1]);
-    vZ = _mm_mul_ps(vZ,mat2.r[2]);
-    vW = _mm_mul_ps(vW,mat2.r[3]);
+    vX = _mm_mul_ps(vX,mat2->r[0]);
+    vY = _mm_mul_ps(vY,mat2->r[1]);
+    vZ = _mm_mul_ps(vZ,mat2->r[2]);
+    vW = _mm_mul_ps(vW,mat2->r[3]);
     vX = _mm_add_ps(vX,vZ);
     vY = _mm_add_ps(vY,vW);
     vX = _mm_add_ps(vX,vY);
     mResult.r[0] = vX;
-    vW = mat1.r[1];
+    vW = mat1->r[1];
     vX = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(0,0,0,0));
     vY = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(1,1,1,1));
     vZ = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(2,2,2,2));
     vW = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(3,3,3,3));
-    vX = _mm_mul_ps(vX,mat2.r[0]);
-    vY = _mm_mul_ps(vY,mat2.r[1]);
-    vZ = _mm_mul_ps(vZ,mat2.r[2]);
-    vW = _mm_mul_ps(vW,mat2.r[3]);
+    vX = _mm_mul_ps(vX,mat2->r[0]);
+    vY = _mm_mul_ps(vY,mat2->r[1]);
+    vZ = _mm_mul_ps(vZ,mat2->r[2]);
+    vW = _mm_mul_ps(vW,mat2->r[3]);
     vX = _mm_add_ps(vX,vZ);
     vY = _mm_add_ps(vY,vW);
     vX = _mm_add_ps(vX,vY);
     mResult.r[1] = vX;
-    vW = mat1.r[2];
+    vW = mat1->r[2];
     vX = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(0,0,0,0));
     vY = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(1,1,1,1));
     vZ = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(2,2,2,2));
     vW = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(3,3,3,3));
-    vX = _mm_mul_ps(vX,mat2.r[0]);
-    vY = _mm_mul_ps(vY,mat2.r[1]);
-    vZ = _mm_mul_ps(vZ,mat2.r[2]);
-    vW = _mm_mul_ps(vW,mat2.r[3]);
+    vX = _mm_mul_ps(vX,mat2->r[0]);
+    vY = _mm_mul_ps(vY,mat2->r[1]);
+    vZ = _mm_mul_ps(vZ,mat2->r[2]);
+    vW = _mm_mul_ps(vW,mat2->r[3]);
     vX = _mm_add_ps(vX,vZ);
     vY = _mm_add_ps(vY,vW);
     vX = _mm_add_ps(vX,vY);
     mResult.r[2] = vX;
-    vW = mat1.r[3];
+    vW = mat1->r[3];
     vX = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(0,0,0,0));
     vY = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(1,1,1,1));
     vZ = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(2,2,2,2));
     vW = _mm_shuffle_ps(vW,vW,sge_sse_shuffle(3,3,3,3));
-    vX = _mm_mul_ps(vX,mat2.r[0]);
-    vY = _mm_mul_ps(vY,mat2.r[1]);
-    vZ = _mm_mul_ps(vZ,mat2.r[2]);
-    vW = _mm_mul_ps(vW,mat2.r[3]);
+    vX = _mm_mul_ps(vX,mat2->r[0]);
+    vY = _mm_mul_ps(vY,mat2->r[1]);
+    vZ = _mm_mul_ps(vZ,mat2->r[2]);
+    vW = _mm_mul_ps(vW,mat2->r[3]);
     vX = _mm_add_ps(vX,vZ);
     vY = _mm_add_ps(vY,vW);
     vX = _mm_add_ps(vX,vY);
