@@ -33,7 +33,20 @@ bool CShader::loadShader(string sFile, int a_iType)
 	int iCompilationStatus;
 	glGetShaderiv(uiShader, GL_COMPILE_STATUS, &iCompilationStatus);
 
-	if(iCompilationStatus == GL_FALSE)return false;
+    if (iCompilationStatus == GL_FALSE)
+    {
+        GLint infoLen = 0;
+        glGetShaderiv(uiShader, GL_INFO_LOG_LENGTH, &infoLen);
+        if (infoLen) {
+            char* buf = (char*)malloc(infoLen);
+            if (buf) {
+                glGetShaderInfoLog(uiShader, infoLen, NULL, buf);
+                fprintf(stderr, "Could not compile shader %d:\n%s\n", a_iType, buf);
+                free(buf);
+            }
+        }
+        return false;
+    }
 	iType = a_iType;
 	bLoaded = true;
 
