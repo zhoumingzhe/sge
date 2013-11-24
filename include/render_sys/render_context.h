@@ -21,7 +21,8 @@ enum sge_render_context_clear_mask
 void sge_render_context_clear(struct sge_render_context*, sge_int32 mask,
                               sge_vec4f color, sge_float32 depth, sge_int32 stencil);
 
-struct sge_render_veretex_buffer* sge_render_context_create_vertex_buffer(
-    struct sge_render_context*);
+struct sge_render_vertex_buffer* sge_render_context_create_vertex_buffer(
+    struct sge_render_context* context, sge_uint32 size, void* buffer, sge_int32 flag,
+    sge_uint32 stride);
 SGE_EXTERN_C_END
 #endif

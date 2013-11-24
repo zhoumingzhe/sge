@@ -1,0 +1,10 @@
+#ifndef RENDER_SYS_INTERFACE_RENDER_VERTEX_BUFFER_INTERNAL_H
+#define RENDER_SYS_INTERFACE_RENDER_VERTEX_BUFFER_INTERNAL_H
+#include "render_vertex_buffer.h"
+#include "basedefine/polymorphic.h"
+
+BEGIN_VTABLE(sge_render_vertex_buffer)
+    void(*destroy)(struct sge_render_vertex_buffer*);
+END_VTABLE(sge_render_vertex_buffer)
+
+#endif

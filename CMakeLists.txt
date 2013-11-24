@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 2.8.10)
 project(sge)
 enable_testing()
 
+set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+include(group)
+
 #SET(BUILD_SHARED_LIBS ON)
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
