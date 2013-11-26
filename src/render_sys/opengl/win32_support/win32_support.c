@@ -1,6 +1,5 @@
+#include "../render_headers_opengl.h"
 #include <windows.h>
-#define GLEW_STATIC
-#include <GL/glew.h>
 #include <GL/wglew.h>
 #include "basedefine/types.h"
 #include "basedefine/utility.h"

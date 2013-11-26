@@ -1,5 +1,5 @@
-#ifndef RENDERSYS_OPENGL_RENDERSYS_OPENGL_H
-#define RENDERSYS_OPENGL_RENDERSYS_OPENGL_H
+#ifndef RENDERSYS_OPENGL_CONTEXT_H
+#define RENDERSYS_OPENGL_CONTEXT_H
 #include "basedefine/types.h"
 #include "basedefine/list.h"
 #include "render_context_internal.h"

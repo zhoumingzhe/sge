@@ -1,10 +1,9 @@
+#include "render_headers_opengl.h"
 #include "render_context_opengl.h"
 #include "render_vertex_buffer_opengl.h"
 #include "basedefine/utility.h"
 #include "basedefine/polymorphic.h"
 #include "memory/sge_memory.h"
-#define GLEW_STATIC
-#include <GL/glew.h>
 
 static void init_opengl_context_state_cache(struct sge_render_context_state_cache *cache)
 {
@@ -66,9 +65,8 @@ struct sge_render_context* context, sge_uint32 size, void* buffer, sge_int32 fla
 {
     VIRTUAL_CONTAINER(context_opengl, context, struct sge_render_context_opengl);
 
-    struct sge_render_vertex_buffer_opengl* vertex_buffer = create_vertex_buffer_opengl();
+    struct sge_render_vertex_buffer_opengl* vertex_buffer = create_vertex_buffer_opengl(
+    context_opengl, size, buffer, flag, stride);
 
-    sge_list_insert_after(&context_opengl->vertex_list, &vertex_buffer->vertex_list);
-    
     return GET_INTERFACE(vertex_buffer);
 }
