@@ -23,10 +23,15 @@ sge_inline void sge_list_insert_before(struct sge_list_entry *list, struct sge_l
 
 sge_inline void sge_list_insert_after(struct sge_list_entry *list, struct sge_list_entry *entry)
 {
-	entry->prev = list;
-	entry->next = list->next;
-	list->next->prev = entry;
-	list->next = entry;
+    entry->prev = list;
+    entry->next = list->next;
+    list->next->prev = entry;
+    list->next = entry;
 }
 
+sge_inline void sge_list_del(struct sge_list_entry *list)
+{
+    list->prev->next = list->next;
+    list->next->prev = list->prev;
+}
 #endif

@@ -65,10 +65,10 @@ struct sge_render_context* context, sge_uint32 size, void* buffer, sge_int32 fla
     sge_uint32 stride)
 {
     VIRTUAL_CONTAINER(context_opengl, context, struct sge_render_context_opengl);
-    
-	struct sge_render_vertex_buffer_opengl* vertex_buffer = create_vertex_buffer_opengl();
 
-	sge_list_insert_after(&context_opengl->vertex_list, &vertex_buffer->vertex_list);
+    struct sge_render_vertex_buffer_opengl* vertex_buffer = create_vertex_buffer_opengl();
+
+    sge_list_insert_after(&context_opengl->vertex_list, &vertex_buffer->vertex_list);
     
     return GET_INTERFACE(vertex_buffer);
 }

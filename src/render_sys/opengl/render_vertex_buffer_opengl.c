@@ -3,6 +3,8 @@
 
 void opengl_destory_vertex_buffer(struct sge_render_vertex_buffer *buffer)
 {
+    VIRTUAL_CONTAINER(buffer_opengl, buffer, struct sge_render_vertex_buffer_opengl);
+    sge_list_del(&buffer_opengl->vertex_list);
     sge_free(buffer);
 }
 
