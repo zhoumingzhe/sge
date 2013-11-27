@@ -60,7 +60,7 @@ void opengl_context_clear(struct sge_render_context* context, sge_int32 mask,
 }
 
 struct sge_render_vertex_buffer* opengl_create_vertex_buffer(
-struct sge_render_context* context, sge_uint32 size, void* buffer, sge_int32 flag,
+struct sge_render_context* context, sge_uint32 size, void* buffer, enum sge_vb_usage flag,
     sge_uint32 stride)
 {
     VIRTUAL_CONTAINER(context_opengl, context, struct sge_render_context_opengl);

@@ -9,6 +9,7 @@ struct sge_render_context_opengl;
 BEGIN_IMPLEMENTATION(sge_render_vertex_buffer_opengl, sge_render_vertex_buffer)
 struct sge_list_entry vertex_list;
 struct sge_render_context_opengl *context;
+GLuint id;
 END_IMPLEMENTATION
 
 struct sge_render_vertex_buffer_opengl* create_vertex_buffer_opengl(
