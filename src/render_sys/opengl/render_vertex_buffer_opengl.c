@@ -30,7 +30,7 @@ struct sge_render_context_opengl* context, sge_uint32 size, void* buffer, enum s
     sge_list_insert_after(&context->vertex_list, &vertex_buffer->vertex_list);
     vertex_buffer->context = context;
     glGenBuffers(1, &vertex_buffer->id);
-    glBindBuffer(vertex_buffer->id, GL_ARRAY_BUFFER);
-    glBufferData(vertex_buffer->id, size, buffer, opengl_vertex_buffer_usage[flag]);
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer->id);
+    glBufferData(GL_ARRAY_BUFFER, size, buffer, opengl_vertex_buffer_usage[flag]);
     return vertex_buffer;
 }

@@ -3,8 +3,9 @@
 
 #include "shaders.h"
 #include "texture.h"
-#include "vertexBufferObject.h"
 #include "render_sys/render_context.h"
+#include "render_sys/render_vertex_buffer.h"
+#include "memory/sge_memory.h"
 #ifdef __cplusplus
 extern "C"
 {
@@ -17,7 +18,7 @@ extern "C"
 #ifdef __cplusplus
 };
 #endif
-CVertexBufferObject vboSceneObjects;
+struct sge_render_vertex_buffer* vboSceneObjects;
 UINT uiVAO; // And one VAO
 
 CShader shVertex, shFragment;
@@ -27,44 +28,50 @@ CTexture tGold, tSnow;
 
 #include "static_geometry.h"
 
-void initScene(struct sge_render_context*)
+void initScene(struct sge_render_context* context)
 {
 	//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    const sge_uint32 size = 54 * (sizeof(vec3)+sizeof(vec2));
+    sge_uint8* data = (sge_uint8*)sge_malloc(size);
+    sge_uint32 offset = 0;
 
-	vboSceneObjects.createVBO();
-	glGenVertexArrays(1, &uiVAO); // Create one VAO
-	glBindVertexArray(uiVAO);
 
-	vboSceneObjects.bindVBO();
-
-	// Add cube to VBO
 
 	FOR(i, 36)
 	{
-		vboSceneObjects.addData(&vCubeVertices[i], sizeof(vec3));
-		vboSceneObjects.addData(&vCubeTexCoords[i%6], sizeof(vec2));
+		memcpy(data + offset, &vCubeVertices[i], sizeof(vec3));
+        offset += sizeof(vec3);
+		memcpy(data + offset, &vCubeTexCoords[i%6], sizeof(vec2));
+        offset += sizeof(vec2);
 	}
 
 	// Add pyramid to VBO
 
 	FOR(i, 12)
 	{
-		vboSceneObjects.addData(&vPyramidVertices[i], sizeof(vec3));
-		vboSceneObjects.addData(&vPyramidTexCoords[i%3], sizeof(vec2));
+        memcpy(data + offset, &vPyramidVertices[i], sizeof(vec3));
+        offset += sizeof(vec3);
+        memcpy(data + offset, &vPyramidTexCoords[i % 3], sizeof(vec2));
+        offset += sizeof(vec2);
 	}
 
 	// Add ground to VBO
 
 	FOR(i, 6)
 	{
-		vboSceneObjects.addData(&vGround[i], sizeof(vec3));
+        memcpy(data + offset, &vGround[i], sizeof(vec3));
+        offset += sizeof(vec3);
 		vCubeTexCoords[i][0] *= 5.0f;
         vCubeTexCoords[i][1] *= 5.0f;
-		vboSceneObjects.addData(&vCubeTexCoords[i%6], sizeof(vec2));
+        memcpy(data + offset, &vCubeTexCoords[i % 6], sizeof(vec2));
+        offset += sizeof(vec2);
 	}
+    vboSceneObjects = sge_render_context_create_vertex_buffer(context, size
+        , data, sge_vb_immutable, (sizeof(vec3)+sizeof(vec2)));
 
-	vboSceneObjects.uploadDataToGPU(GL_STATIC_DRAW);
-
+    glGenVertexArrays(1, &uiVAO); // Create one VAO
+    glBindVertexArray(uiVAO);
+    // Add cube to VBO
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vec3)+sizeof(vec2), 0);
 	glEnableVertexAttribArray(1);
@@ -89,6 +96,7 @@ void initScene(struct sge_render_context*)
 	tSnow.loadTexture2D("data\\textures\\snow.dds", true);
 	tSnow.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
 	glEnable(GL_TEXTURE_2D);
+    sge_free(data);
 }
 
 float fRotationAngleCube = 0.0f, fRotationAnglePyramid = 0.0f;
@@ -170,7 +178,7 @@ void releaseScene(struct sge_render_context*)
 	shVertex.deleteShader();
 	shFragment.deleteShader();
 
-	vboSceneObjects.releaseVBO();
+	sge_render_vertex_buffer_destroy(vboSceneObjects);
 	glDeleteVertexArrays(1, &uiVAO);
 
 	tGold.releaseTexture();
