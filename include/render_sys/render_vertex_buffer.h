@@ -1,6 +1,6 @@
 #ifndef RENDERSYS_VERTEXBUFFER_H
 #define RENDERSYS_VERTEXBUFFER_H
-#include "basedefine/platform.h"
+#include "basedefine/types.h"
 SGE_EXTERN_C_START
 enum sge_vb_usage
 {
@@ -11,6 +11,8 @@ enum sge_vb_usage
 
 struct sge_render_vertex_buffer;
 void sge_render_vertex_buffer_destroy(struct sge_render_vertex_buffer* buffer);
+void sge_render_vertex_buffer_upload_data(struct sge_render_vertex_buffer* buffer,
+    void* data, sge_uint32 size);
 SGE_EXTERN_C_END
 
 #endif

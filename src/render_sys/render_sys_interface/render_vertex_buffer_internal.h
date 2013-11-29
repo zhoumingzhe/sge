@@ -5,6 +5,7 @@
 
 BEGIN_VTABLE(sge_render_vertex_buffer)
     void(*destroy)(struct sge_render_vertex_buffer*);
+    void(*upload_data)(struct sge_render_vertex_buffer*, void *, sge_uint32);
 END_VTABLE(sge_render_vertex_buffer)
 
 #endif
