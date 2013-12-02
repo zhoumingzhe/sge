@@ -17,8 +17,13 @@ void sge_render_context_clear(struct sge_render_context* render_context,
 }
 
 struct sge_render_vertex_buffer* sge_render_context_create_vertex_buffer(
-struct sge_render_context* context, sge_uint32 size, void* buffer, enum sge_vb_usage flag,
+    struct sge_render_context* context, sge_uint32 size, void* buffer, enum sge_vb_usage flag,
     sge_uint32 stride)
 {
     return VTABLE_CALL(context, create_vertex_buffer)(context, size, buffer, flag, stride);
+}
+
+void sge_render_context_enable_depth_test(struct sge_render_context* context, sge_bool enable)
+{
+    VTABLE_CALL(context, enable_depth_test)(context, enable);
 }

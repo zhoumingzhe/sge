@@ -88,7 +88,7 @@ void initScene(struct sge_render_context* context)
 	spMain.linkProgram();
 	spMain.useProgram();
 
-	glEnable(GL_DEPTH_TEST);
+	sge_render_context_enable_depth_test(context, sge_true);
 	//glClearDepth(1.0);
 
 	tGold.loadTexture2D("data\\textures\\golddiag.dds", true);

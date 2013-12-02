@@ -46,4 +46,7 @@ static const sge_uint64 sge_uint64_max = 0xffffffffffffffffULL;
 static const sge_int64 sge_int64_max = 9223372036854775807LL;
 static const sge_int64 sge_int64_min = -9223372036854775807LL-1;
 
+static const sge_bool sge_true = 1;
+static const sge_bool sge_false = 0;
+
 #endif

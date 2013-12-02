@@ -121,6 +121,7 @@ BEGIN_VTABLE_INSTANCE(sge_render_context_opengl_win32, sge_render_context)
     opengl_context_destroy,
     opengl_context_clear,
     opengl_create_vertex_buffer,
+    opengl_enable_depth_test,
 END_VTABLE_INSTANCE
 
 static void APIENTRY opengl_debug_callback(GLenum source, GLenum type, GLuint id,

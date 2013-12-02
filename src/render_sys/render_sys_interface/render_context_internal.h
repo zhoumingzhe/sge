@@ -8,6 +8,7 @@ BEGIN_VTABLE(sge_render_context)
     void (*destory)(struct sge_render_context*);
     void (*clear)(struct sge_render_context*, sge_int32, sge_vec4f, sge_float32, sge_int32);
     struct sge_render_vertex_buffer* (*create_vertex_buffer)(struct sge_render_context*, sge_uint32, void*, enum sge_vb_usage, sge_uint32);
+    void (*enable_depth_test)(struct sge_render_context*, sge_bool);
 END_VTABLE(sge_render_context)
 
 #endif

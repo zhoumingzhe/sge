@@ -24,7 +24,9 @@ void sge_render_context_clear(struct sge_render_context*, sge_int32 mask,
 enum sge_vb_usage;
 
 struct sge_render_vertex_buffer* sge_render_context_create_vertex_buffer(
-struct sge_render_context* context, sge_uint32 size, void* buffer, enum sge_vb_usage flag,
+    struct sge_render_context* context, sge_uint32 size, void* buffer, enum sge_vb_usage flag,
     sge_uint32 stride);
+
+void sge_render_context_enable_depth_test(struct sge_render_context* context, sge_bool enable);
 SGE_EXTERN_C_END
 #endif
