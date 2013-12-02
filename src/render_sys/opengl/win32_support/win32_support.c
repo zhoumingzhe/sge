@@ -12,9 +12,9 @@ LRESULT CALLBACK msgHandlerSimpleOpenGLClass(HWND hWnd, UINT uiMsg, WPARAM wPara
     PAINTSTRUCT ps;
     switch(uiMsg)
     {
-    case WM_PAINT:									
-        BeginPaint(hWnd, &ps);							
-        EndPaint(hWnd, &ps);					
+    case WM_PAINT:
+        BeginPaint(hWnd, &ps);
+        EndPaint(hWnd, &ps);
         break;
 
     default:
@@ -123,6 +123,13 @@ BEGIN_VTABLE_INSTANCE(sge_render_context_opengl_win32, sge_render_context)
     opengl_create_vertex_buffer,
 END_VTABLE_INSTANCE
 
+static void APIENTRY opengl_debug_callback(GLenum source, GLenum type, GLuint id,
+    GLenum severity, GLsizei length, const GLchar* message, GLvoid* userParam)
+{
+
+}
+
+
 struct sge_render_context* create_context(struct sge_render_sys* render_sys, struct sge_window_obj* window_obj)
 {
     HWND hwnd = (HWND)sge_window_get_native_obj(window_obj);
@@ -147,7 +154,7 @@ struct sge_render_context* create_context(struct sge_render_sys* render_sys, str
         {
             WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
             WGL_CONTEXT_MINOR_VERSION_ARB, 3,
-            WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+            WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
             0 // End of attributes list
         };
 
@@ -166,7 +173,7 @@ struct sge_render_context* create_context(struct sge_render_sys* render_sys, str
             context->hdc = hDC;
             context->hrc = hRC;
             wglMakeCurrent(hDC, hRC);
-
+            glDebugMessageCallback(opengl_debug_callback, context);
             return GET_INTERFACE2(context);
         }
         else

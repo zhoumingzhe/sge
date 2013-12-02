@@ -69,6 +69,7 @@ void initScene(struct sge_render_context* context)
     vboSceneObjects = sge_render_context_create_vertex_buffer(context, size
         , data, sge_vb_immutable, (sizeof(vec3)+sizeof(vec2)));
 
+    sge_free(data);
     glGenVertexArrays(1, &uiVAO); // Create one VAO
     glBindVertexArray(uiVAO);
     // Add cube to VBO
@@ -96,7 +97,6 @@ void initScene(struct sge_render_context* context)
 	tSnow.loadTexture2D("data\\textures\\snow.dds", true);
 	tSnow.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
 	glEnable(GL_TEXTURE_2D);
-    sge_free(data);
 }
 
 float fRotationAngleCube = 0.0f, fRotationAnglePyramid = 0.0f;
