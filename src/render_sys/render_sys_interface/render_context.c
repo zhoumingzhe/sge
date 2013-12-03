@@ -27,3 +27,8 @@ void sge_render_context_enable_depth_test(struct sge_render_context* context, sg
 {
     VTABLE_CALL(context, enable_depth_test)(context, enable);
 }
+
+void sge_render_context_draw(struct sge_render_context* context, enum sge_primitive_type type, sge_int32 start, sge_int32 count)
+{
+    VTABLE_CALL(context, draw)(context, type, start, count);
+}

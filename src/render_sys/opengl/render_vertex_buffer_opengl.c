@@ -2,7 +2,7 @@
 #include "render_vertex_buffer_opengl.h"
 #include "render_context_opengl.h"
 #include "memory/sge_memory.h"
-
+#include "basedefine/static_assert.h"
 static GLenum opengl_vertex_buffer_usage[] =
 {
     GL_STATIC_DRAW,
@@ -10,7 +10,7 @@ static GLenum opengl_vertex_buffer_usage[] =
     GL_DYNAMIC_DRAW
 };
 
-
+sge_static_assert(sizeof(opengl_vertex_buffer_usage) / sizeof(opengl_vertex_buffer_usage[0]), buffer_usage_equal);
 static void opengl_destory_vertex_buffer(struct sge_render_vertex_buffer *buffer)
 {
     VIRTUAL_CONTAINER(buffer_opengl, buffer, struct sge_render_vertex_buffer_opengl);

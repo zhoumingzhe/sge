@@ -41,10 +41,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR sCmdLine,
     sge_window_sys_set_handler_idle(window_sys, IDLE);
     sge_window_sys_main_loop(window_sys);
 
+    releaseScene(context);
     sge_render_context_destroy(context);
     sge_window_destroy(obj);
 
-    releaseScene(g_render_context);
     sge_render_sys_destroy(render_sys);
     sge_window_sys_destory(window_sys);
     UNUSED(i);

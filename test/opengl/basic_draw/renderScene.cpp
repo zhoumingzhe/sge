@@ -141,7 +141,7 @@ void renderScene(struct sge_render_context* context)
 
 	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, &(mCurrent._11));
 
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+    sge_render_context_draw(context, sge_pt_triangle, 0, 12);
 
 	// Rendering of pyramid
 
@@ -158,15 +158,15 @@ void renderScene(struct sge_render_context* context)
 
 	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, &(mCurrent._11));
 
-	glDrawArrays(GL_TRIANGLES, 36, 12);
+    sge_render_context_draw(context, sge_pt_triangle, 36, 4);
 
 	// Render ground
 
 	tSnow.bindTexture();
 
 	glUniformMatrix4fv(iModelViewLoc, 1, GL_FALSE, &(mModelView._11));
-	glDrawArrays(GL_TRIANGLES, 48, 6);
-
+	//glDrawArrays(GL_TRIANGLES, 48, 6);
+    sge_render_context_draw(context, sge_pt_triangle, 48, 2);
 	//oglControl->swapBuffers();
 }
 

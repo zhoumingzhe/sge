@@ -28,5 +28,15 @@ struct sge_render_vertex_buffer* sge_render_context_create_vertex_buffer(
     sge_uint32 stride);
 
 void sge_render_context_enable_depth_test(struct sge_render_context* context, sge_bool enable);
+
+enum sge_primitive_type
+{
+    sge_pt_triangle,
+    sge_pt_triangle_fan,
+    sge_pt_triangle_strip,
+    sge_pt_end
+};
+void sge_render_context_draw(struct sge_render_context* context, enum sge_primitive_type type, sge_int32 start, sge_int32 count);
+
 SGE_EXTERN_C_END
 #endif

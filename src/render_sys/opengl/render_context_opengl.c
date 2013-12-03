@@ -3,6 +3,7 @@
 #include "render_vertex_buffer_opengl.h"
 #include "basedefine/utility.h"
 #include "basedefine/polymorphic.h"
+#include "basedefine/static_assert.h"
 #include "memory/sge_memory.h"
 
 static void init_opengl_context_state_cache(struct sge_render_context_state_cache *cache)
@@ -84,4 +85,17 @@ void opengl_enable_depth_test(struct sge_render_context* context, sge_bool enabl
             glDisable(GL_DEPTH_TEST);
         context_opengl->cache.depth_test_enable = enable;
     }
+}
+
+static GLenum primitive_topo[] =
+{
+    GL_TRIANGLES,
+    GL_TRIANGLE_FAN,
+    GL_TRIANGLE_STRIP
+};
+
+sge_static_assert(sizeof(primitive_topo) / sizeof(primitive_topo[0]) == sge_pt_end, primitive_topology_equal);
+void opengl_draw(struct sge_render_context* context, enum sge_primitive_type type, sge_int32 start, sge_int32 count)
+{
+    glDrawArrays(primitive_topo[type], start, count*3);
 }

@@ -27,5 +27,8 @@ void opengl_context_clear(struct sge_render_context* context, sge_int32 mask,
 struct sge_render_vertex_buffer* opengl_create_vertex_buffer(
     struct sge_render_context* context, sge_uint32 size, void* buffer, enum sge_vb_usage flag,
     sge_uint32 stride);
-void opengl_enable_depth_test(struct sge_render_context* context, sge_bool size);
+
+    void opengl_enable_depth_test(struct sge_render_context* context, sge_bool size);
+
+void opengl_draw(struct sge_render_context* context, enum sge_primitive_type type, sge_int32 start, sge_int32 count);
 #endif
