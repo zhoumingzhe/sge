@@ -11,6 +11,7 @@ struct sge_list_entry vertex_list;
 struct sge_render_context_opengl *context;
 GLuint id;
 enum sge_vb_usage usage_flag;
+sge_int32 stride;
 END_IMPLEMENTATION
 
 struct sge_render_vertex_buffer_opengl* create_vertex_buffer_opengl(

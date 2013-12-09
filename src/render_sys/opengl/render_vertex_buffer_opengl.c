@@ -45,6 +45,7 @@ struct sge_render_context_opengl* context, sge_uint32 size, void* buffer,
     sge_list_insert_after(&context->vertex_list, &vertex_buffer->vertex_list);
     vertex_buffer->context = context;
     vertex_buffer->usage_flag = flag;
+    vertex_buffer->stride = stride;
     glGenBuffers(1, &vertex_buffer->id);
     if (size > 0 && buffer)
     {
