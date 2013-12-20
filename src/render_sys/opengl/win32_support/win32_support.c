@@ -123,6 +123,7 @@ BEGIN_VTABLE_INSTANCE(sge_render_context_opengl_win32, sge_render_context)
     opengl_create_vertex_buffer,
     opengl_enable_depth_test,
     opengl_draw,
+    opengl_create_vertex_layout,
     //opengl_draw_indexed,
     //opengl_draw_instanced,
     //opengl_draw_indexed_instance,

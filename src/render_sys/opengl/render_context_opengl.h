@@ -31,4 +31,9 @@ struct sge_render_vertex_buffer* opengl_create_vertex_buffer(
     void opengl_enable_depth_test(struct sge_render_context* context, sge_bool size);
 
 void opengl_draw(struct sge_render_context* context, enum sge_primitive_type type, sge_int32 start, sge_int32 count);
+
+struct sge_render_vertex_layout* opengl_create_vertex_layout(struct sge_render_context* context,
+    const struct sge_render_vertex_buffer * buffers, sge_uint32 buffer_size,
+    const struct sge_vb_layout *layouts, sge_uint32 layout_size);
+
 #endif

@@ -32,3 +32,10 @@ void sge_render_context_draw(struct sge_render_context* context, enum sge_primit
 {
     VTABLE_CALL(context, draw)(context, type, start, count);
 }
+
+struct sge_render_vertex_layout* sge_render_context_create_vertex_layout(struct sge_render_context* context,
+    const struct sge_render_vertex_buffer * buffers, sge_uint32 buffer_size,
+    const struct sge_vb_layout *layouts, sge_uint32 layout_size)
+{
+    return VTABLE_CALL(context, create_vertex_layout)(context, buffers, buffer_size, layouts, layout_size);
+}

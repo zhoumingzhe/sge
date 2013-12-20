@@ -116,7 +116,8 @@ void renderScene(struct sge_render_context* context)
 	int iProjectionLoc = glGetUniformLocation(spMain.getProgramID(), "projectionMatrix");
 	glUniformMatrix4fv(iProjectionLoc, 1, GL_FALSE, &(mProjection._11));
 
-	sge_mat44f mModelView = sge_mat44f_lookat_rh(sge_vec4f_init(0, 12, 27, 0), sge_vec4f_init(0, 0, 0, 0), sge_vec4f_init(0.0f, 1.0f, 0.0f, 0.0f));
+	sge_mat44f mModelView = sge_mat44f_lookat_rh(sge_vec4f_init(0, 12, 27, 0),
+        sge_vec4f_init(0, 0, 0, 0), sge_vec4f_init(0.0f, 1.0f, 0.0f, 0.0f));
 	sge_mat44f mCurrent;
 
 	glBindVertexArray(uiVAO);

@@ -99,3 +99,10 @@ void opengl_draw(struct sge_render_context* context, enum sge_primitive_type typ
 {
     glDrawArrays(primitive_topo[type], start, count*3);
 }
+
+struct sge_render_vertex_layout* opengl_create_vertex_layout(struct sge_render_context* context,
+    const struct sge_render_vertex_buffer * buffers, sge_uint32 buffer_size,
+    const struct sge_vb_layout *layouts, sge_uint32 layout_size)
+{
+    return 0;
+}
